@@ -1,4 +1,4 @@
-package lindar.acolyte;
+package lindar.acolyte.util;
 
 import com.google.common.collect.Lists;
 import java.lang.reflect.InvocationTargetException;
@@ -12,10 +12,6 @@ import java.util.logging.Logger;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 
-/**
- *
- * @author iulian
- */
 public class ObjectsUtil {
 
     private static final String SET_METHOD_PREFIX = "set";
@@ -24,23 +20,18 @@ public class ObjectsUtil {
 
     private ObjectsUtil() {
     }
-
+    
+    
     /**
-     * Go through all the setters of the second object and try to find a getter
-     * in the first object that matches the name and has the same return value
-     * as the setter's parameter type. If override is set to false then for each
-     * setter of the second method, its own getter is checked and if the value
-     * returned is not null or empty (for collections) then the setter invoking
-     * is skipped. Ignores every other method that is NOT public, setter or
-     * getter.
-     *
-     * On top of this there might be cases when you want to have override set to
-     * true but skip certain variables like the <b>id</b>. You can do so by
-     * providing a list of string with the variables names. For this use the
-     * other overloaded method
-     *
+     * Go through all the setters of the second object and try to find a getter in the first object that matches the name and has the same return value as the setter's parameter type.
+     * If override is set to false then for each setter of the second method, its own getter is checked and if the value returned is not null or empty (for collections) then the setter invoking is skipped.
+     * Ignores every other method that is NOT public, setter or getter.
+     * 
+     * On top of this there might be cases when you want to have override set to true but skip certain variables like the <b>id</b>. 
+     * You can do so by providing a list of string with the variables names. For this use the other overloaded method
+     * 
      * Returns the second object with the new values
-     *
+     * 
      * @param firstObject
      * @param secondObject
      * @param override
@@ -51,20 +42,15 @@ public class ObjectsUtil {
     }
 
     /**
-     * Go through all the setters of the second object and try to find a getter
-     * in the first object that matches the name and has the same return value
-     * as the setter's parameter type. If override is set to false then for each
-     * setter of the second method, its own getter is checked and if the value
-     * returned is not null or empty (for collections) then the setter invoking
-     * is skipped. Ignores every other method that is NOT public, setter or
-     * getter.
-     *
-     * On top of this there might be cases when you want to have override set to
-     * true but skip certain variables like the <b>id</b>. You can do so by
-     * providing a list of string with the variables names.
-     *
+     * Go through all the setters of the second object and try to find a getter in the first object that matches the name and has the same return value as the setter's parameter type.
+     * If override is set to false then for each setter of the second method, its own getter is checked and if the value returned is not null or empty (for collections) then the setter invoking is skipped.
+     * Ignores every other method that is NOT public, setter or getter.
+     * 
+     * On top of this there might be cases when you want to have override set to true but skip certain variables like the <b>id</b>. 
+     * You can do so by providing a list of string with the variables names.
+     * 
      * Returns the second object with the new values
-     *
+     * 
      * @param firstObject
      * @param secondObject
      * @param override
@@ -125,25 +111,20 @@ public class ObjectsUtil {
                 }
             }
         }
-
+        
         return secondObject;
     }
-
+    
     /**
-     * Create an object of the second object class and go through all the
-     * setters and try to find a getter in the first object that matches the
-     * name and has the same return value as the setter's parameter type. If
-     * override is set to false then for each setter of the second method, its
-     * own getter is checked and if the value returned is not null or empty (for
-     * collections) then the setter invoking is skipped. Ignores every other
-     * method that is NOT public, setter or getter.
+     *Create an object of the second object class and go through all the setters and try to find a getter in the first object that matches the name and has the same return value as the setter's parameter type.
+     * If override is set to false then for each setter of the second method, its own getter is checked and if the value returned is not null or empty (for collections) then the setter invoking is skipped.
+     * Ignores every other method that is NOT public, setter or getter.
      *
-     * On top of this there might be cases when you want to have override set to
-     * true but skip certain variables like the <b>id</b>. You can do so by
-     * providing a list of string with the variables names.
-     *
+     * On top of this there might be cases when you want to have override set to true but skip certain variables like the <b>id</b>. 
+     * You can do so by providing a list of string with the variables names.
+     * 
      * Returns the created second object with the new values.
-     *
+     * 
      * @param firstObject
      * @param secondObjectClass
      * @param override
@@ -159,23 +140,17 @@ public class ObjectsUtil {
         }
         return Optional.empty();
     }
-
+    
     /**
-     * Create an object of the second object class and go through all the
-     * setters and try to find a getter in the first object that matches the
-     * name and has the same return value as the setter's parameter type. If
-     * override is set to false then for each setter of the second method, its
-     * own getter is checked and if the value returned is not null or empty (for
-     * collections) then the setter invoking is skipped. Ignores every other
-     * method that is NOT public, setter or getter.
+     *Create an object of the second object class and go through all the setters and try to find a getter in the first object that matches the name and has the same return value as the setter's parameter type.
+     * If override is set to false then for each setter of the second method, its own getter is checked and if the value returned is not null or empty (for collections) then the setter invoking is skipped.
+     * Ignores every other method that is NOT public, setter or getter.
      *
-     * On top of this there might be cases when you want to have override set to
-     * true but skip certain variables like the <b>id</b>. You can do so by
-     * providing a list of string with the variables names. For this use the
-     * other overloaded method
-     *
+     * On top of this there might be cases when you want to have override set to true but skip certain variables like the <b>id</b>. 
+     * You can do so by providing a list of string with the variables names. For this use the other overloaded method
+     * 
      * Returns the created second object with the new values.
-     *
+     * 
      * @param firstObject
      * @param secondObjectClass
      * @param override
@@ -184,8 +159,9 @@ public class ObjectsUtil {
     public static <T> Optional<T> copyObjectsIfMatch(Object firstObject, Class<T> secondObjectClass, boolean override) {
         return copyObjectsIfMatch(firstObject, secondObjectClass, override, new ArrayList<>(0));
     }
-
-    /**
+    
+    
+        /**
      * This method returns all public variables that have a getter including the
      * inherited ones. 
      * This algorithm strips down the GET prefix or the IS
@@ -253,6 +229,8 @@ public class ObjectsUtil {
         return names;
     }
 
+    
+    
     private static boolean objectNullOrEmpty(Object object) {
         if (object == null) {
             return true;
@@ -263,11 +241,11 @@ public class ObjectsUtil {
         return false;
     }
     
-    public static <T> boolean emptyList(List<T> list) {
+    public static <T> boolean listIsEmpty(List<T> list) {
         return list == null || list.isEmpty();
     }
     
-    public static <T> boolean notEmptyList(List<T> list) {
+    public static <T> boolean listIsNotEmpty(List<T> list) {
         return list != null && !list.isEmpty();
     }
 }
