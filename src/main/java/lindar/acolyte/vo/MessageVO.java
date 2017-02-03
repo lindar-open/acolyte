@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 public class MessageVO {
     
+    private String chatRoom;
+    
     private String username;
     
     private String body;
