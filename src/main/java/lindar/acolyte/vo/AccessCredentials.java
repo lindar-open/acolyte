@@ -21,4 +21,8 @@ public class AccessCredentials {
     public AccessCredentials(String sessionCookie) {
         this.sessionCookie = sessionCookie;
     }
+    
+    public String getSessionCookie() {
+        return this.sessionCookie;
+    }
 }

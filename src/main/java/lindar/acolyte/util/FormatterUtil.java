@@ -46,8 +46,8 @@ public class FormatterUtil {
     }
 
     private static String remove0Decimals(String number) {
-        if (number.contains(".00") || number.contains(".0")) {
-            return number.substring(0, number.indexOf('.'));
+        if (number.matches(".\\.0+")) {
+            return number.substring(0, number.lastIndexOf('.'));
         }
         return number;
     }
