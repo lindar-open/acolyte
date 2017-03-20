@@ -210,7 +210,7 @@ public class ObjectsUtil {
      */
     public static <T> List<String> listAllVariablesWithGetters(T object, List<String> namesToIgnore) {
         Method[] objMethods = object.getClass().getMethods();
-        List<String> names = new ArrayList<>();
+        List<String> names = new ArrayList<>(objMethods.length);
         for (Method firstObjMethod : objMethods) {
             String objMethodName = firstObjMethod.getName();
             String objStrippedMethodName;
