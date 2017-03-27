@@ -9,17 +9,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 
+@UtilityClass
 public class ObjectsUtil {
 
     private static final String SET_METHOD_PREFIX = "set";
     private static final String GET_METHOD_PREFIX = "get";
     private static final String IS_METHOD_PREFIX = "is";
-
-    private ObjectsUtil() {
-    }
     
     
     /**
@@ -37,8 +36,8 @@ public class ObjectsUtil {
      * @param override
      * @return Returns the second object with the new values
      */
-    public static <T> T copyObjectsIfMatch(Object firstObject, T secondObject, boolean override) {
-        return copyObjectsIfMatch(firstObject, secondObject, override, new ArrayList<>(0));
+    public static <T> T copy(Object firstObject, T secondObject, boolean override) {
+        return ObjectsUtil.copy(firstObject, secondObject, override, new ArrayList<>(0));
     }
 
     /**
@@ -57,7 +56,7 @@ public class ObjectsUtil {
      * @param skipVariables
      * @return Returns the second object with the new values
      */
-    public static <T> T copyObjectsIfMatch(Object firstObject, T secondObject, boolean override, List<String> skipVariables) {
+    public static <T> T copy(Object firstObject, T secondObject, boolean override, List<String> skipVariables) {
 
         Method[] firstObjMethods = firstObject.getClass().getMethods();
         Method[] secondObjMethods = secondObject.getClass().getMethods();
@@ -89,7 +88,7 @@ public class ObjectsUtil {
                 if (secondObjStrippedMethodName.equals(firstObjStrippedMethodName) && secondObjMethodParamTypes[0].getCanonicalName().equals(firstObjMethod.getReturnType().getCanonicalName())) {
                     try {
                         Object firstObjMethodReturnValue = firstObjMethod.invoke(firstObject);
-                        if (!override || skipVariables.contains(firstObjStrippedMethodName)) {
+                        if (!override || listContainsIgnoreCase(skipVariables, firstObjStrippedMethodName)) {
                             try {
                                 Object secondObjMethodReturnValue;
                                 if (booleanMethod) {
@@ -131,10 +130,10 @@ public class ObjectsUtil {
      * @param skipVariables
      * @return Returns the created second object with the new values
      */
-    public static <T> Optional<T> copyObjectsIfMatch(Object firstObject, Class<T> secondObjectClass, boolean override, List<String> skipVariables) {
+    public static <T> Optional<T> copy(Object firstObject, Class<T> secondObjectClass, boolean override, List<String> skipVariables) {
         try {
             T secondObject = secondObjectClass.newInstance();
-            return Optional.of(copyObjectsIfMatch(firstObject, secondObject, override, skipVariables));
+            return Optional.of(ObjectsUtil.copy(firstObject, secondObject, override, skipVariables));
         } catch (InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(ObjectsUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -156,8 +155,8 @@ public class ObjectsUtil {
      * @param override
      * @return Returns the created second object with the new values
      */
-    public static <T> Optional<T> copyObjectsIfMatch(Object firstObject, Class<T> secondObjectClass, boolean override) {
-        return copyObjectsIfMatch(firstObject, secondObjectClass, override, new ArrayList<>(0));
+    public static <T> Optional<T> copy(Object firstObject, Class<T> secondObjectClass, boolean override) {
+        return ObjectsUtil.copy(firstObject, secondObjectClass, override, new ArrayList<>(0));
     }
     
     
@@ -229,9 +228,7 @@ public class ObjectsUtil {
         return names;
     }
 
-    
-    
-    private static boolean objectNullOrEmpty(Object object) {
+    public static boolean objectNullOrEmpty(Object object) {
         if (object == null) {
             return true;
         }
@@ -241,11 +238,26 @@ public class ObjectsUtil {
         return false;
     }
     
+    public static boolean listContainsIgnoreCase(List<String> list, String item) {
+        if (listIsEmpty(list)) {
+            return false;
+        }
+        return list.stream().filter(i -> StringUtils.equalsIgnoreCase(item, i)).findAny().isPresent();
+    }
+    
     public static <T> boolean listIsEmpty(List<T> list) {
         return list == null || list.isEmpty();
     }
     
     public static <T> boolean listIsNotEmpty(List<T> list) {
         return list != null && !list.isEmpty();
+    }
+    
+    public static boolean numberNullOrZero(Number number) {
+        return number == null || number.doubleValue() == 0d;
+    }
+    
+    public static boolean numberGreaterThanZero(Number number) {
+        return number != null && number.doubleValue() > 0d;
     }
 }

@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 
 @Slf4j
-public class FormatterUtil {
+public class NumberFormatterUtil {
 
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,##0.00");
     private static final DecimalFormat DECIMAL_FORMAT_NO_EXTRA_DIGITS = new DecimalFormat("#,##0.##");
@@ -114,6 +114,6 @@ public class FormatterUtil {
         return formatNumber(firstAmountDoubleVal + secondAmountDoubleVal);
     }
 
-    private FormatterUtil() {
+    private NumberFormatterUtil() {
     }
 }
