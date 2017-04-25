@@ -257,6 +257,10 @@ public class ObjectsUtil {
         return number == null || number.doubleValue() == 0d;
     }
     
+    public static boolean numberNullZeroOrLess(Number number) {
+        return number == null || number.doubleValue() <= 0d;
+    }
+    
     public static boolean numberGreaterThanZero(Number number) {
         return number != null && number.doubleValue() > 0d;
     }
