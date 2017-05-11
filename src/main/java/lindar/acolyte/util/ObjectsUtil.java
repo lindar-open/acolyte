@@ -31,6 +31,26 @@ public class ObjectsUtil {
      * 
      * Returns the second object with the new values
      * 
+     * Default: override is set to true
+     * 
+     * @param firstObject
+     * @param secondObject
+     * @return Returns the second object with the new values
+     */
+    public static <T> T copy(Object firstObject, T secondObject) {
+        return ObjectsUtil.copy(firstObject, secondObject, true, new ArrayList<>(0));
+    }
+    
+    /**
+     * Go through all the setters of the second object and try to find a getter in the first object that matches the name and has the same return value as the setter's parameter type.
+     * If override is set to false then for each setter of the second method, its own getter is checked and if the value returned is not null or empty (for collections) then the setter invoking is skipped.
+     * Ignores every other method that is NOT public, setter or getter.
+     * 
+     * On top of this there might be cases when you want to have override set to true but skip certain variables like the <b>id</b>. 
+     * You can do so by providing a list of string with the variables names. For this use the other overloaded method
+     * 
+     * Returns the second object with the new values
+     * 
      * @param firstObject
      * @param secondObject
      * @param override
