@@ -9,7 +9,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 public class NumberFormatterAcolyte {
 
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,##0.00");
-    private static final DecimalFormat DECIMAL_FORMAT_NO_EXTRA_DIGITS = new DecimalFormat("#,##0.##");
+    private static final DecimalFormat DECIMAL_FORMAT_NO_EXTRA_DIGITS = new DecimalFormat("#,##0.######");
     
     private static final DecimalFormat DECIMAL_FORMAT_NO_COMMA = new DecimalFormat("###0.00");
     private static final DecimalFormat DECIMAL_FORMAT_NO_EXTRA_DIGITS_NO_COMMA = new DecimalFormat("###0.##");
@@ -24,7 +24,7 @@ public class NumberFormatterAcolyte {
         if (number.doubleValue() % 1 == 0) {
             return DECIMAL_FORMAT_NO_EXTRA_DIGITS_NO_COMMA.format(number);
         }
-        return remove0Decimals(DECIMAL_FORMAT_NO_COMMA.format(number));
+        return remove0Decimals(DECIMAL_FORMAT_NO_COMMA.format(number)); 
     }
 
     public static String formatNumber(Number number) {

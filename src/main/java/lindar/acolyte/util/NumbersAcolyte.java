@@ -13,8 +13,13 @@ public class NumbersAcolyte {
         return number == null || number.doubleValue() <= 0d;
     }
     
+    
     public static boolean greaterThanZero(Number number) {
         return number != null && number.doubleValue() > 0d;
+    }
+    
+    public static boolean equalOrGreaterThanZero(Number number) {
+        return number != null && number.doubleValue() >= 0d;
     }
     
     public static boolean greaterThan(Number initialNumber, Number comparingNumber) {
@@ -23,6 +28,23 @@ public class NumbersAcolyte {
     
     public static boolean equalOrGreaterThan(Number initialNumber, Number comparingNumber) {
         return initialNumber != null && initialNumber.doubleValue() >= comparingNumber.doubleValue();
+    }
+    
+    
+    public static boolean lessThanZero(Number number) {
+        return number != null && number.doubleValue() < 0d;
+    }
+    
+    public static boolean equalOrLessThanZero(Number number) {
+        return number != null && number.doubleValue() <= 0d;
+    }
+    
+    public static boolean lessThan(Number initialNumber, Number comparingNumber) {
+        return initialNumber != null && initialNumber.doubleValue() < comparingNumber.doubleValue();
+    }
+    
+    public static boolean equalOrLessThan(Number initialNumber, Number comparingNumber) {
+        return initialNumber != null && initialNumber.doubleValue() <= comparingNumber.doubleValue();
     }
     
     
