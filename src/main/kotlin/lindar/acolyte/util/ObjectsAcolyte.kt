@@ -116,7 +116,7 @@ class ObjectsAcolyte {
                             val firstObjMethodReturnValue = firstObjMethod.invoke(firstObject)
                             if (!override || ListsAcolyte.containsIgnoreCase(skipVariables, firstObjStrippedMethodName)) {
                                 try {
-                                    val secondObjMethodReturnValue: Any
+                                    val secondObjMethodReturnValue: Any?
                                     if (booleanMethod) {
                                         secondObjMethodReturnValue = secondObject.javaClass.getMethod(IS_METHOD_PREFIX + secondObjStrippedMethodName).invoke(secondObject)
                                     } else {
