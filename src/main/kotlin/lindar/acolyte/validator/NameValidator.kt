@@ -3,7 +3,7 @@ package lindar.acolyte.validator
 
 class NameValidator {
     companion object {
-        private val NAME_PATTERN = """"^[a-zA-Z]{1,500}$"""
+        private val NAME_PATTERN = """^[a-zA-Z]{1,500}$"""
 
         /**
          * Validate name - 1 to 500 characters with any lowercase or uppercase character

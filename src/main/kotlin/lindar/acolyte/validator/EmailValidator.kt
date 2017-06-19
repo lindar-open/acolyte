@@ -3,7 +3,7 @@ package lindar.acolyte.validator
 
 class EmailValidator {
     companion object {
-        private val EMAIL_PATTERN = """"^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,20}$"""
+        private val EMAIL_PATTERN = """^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,20}$"""
 
         /**
          * Validate email - Minimum 8 chars, at least one digit, lower case char, upper case char

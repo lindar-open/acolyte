@@ -11,7 +11,7 @@ class PasswordValidator {
             .{8,256}          # between 8 and 256 chars
             $                 # end-of-string
          */
-        private val PASS_PATTERN = """"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,256}$"""
+        private val PASS_PATTERN = """^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,256}$"""
 
         /**
          * Validate password - Minimum 8 chars, at least one digit, lower case char, upper case char
