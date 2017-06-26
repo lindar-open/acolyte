@@ -109,6 +109,11 @@ class NumbersAcolyte {
         }
 
         @JvmStatic
+        fun defaultIfNull(number: Number?): Number {
+            return number ?: 0
+        }
+
+        @JvmStatic
         fun defaultIfNull(number: Number?, defaultVal: Number): Number {
             return number ?: defaultVal
         }
