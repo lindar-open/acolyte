@@ -43,7 +43,7 @@ class ListsAcolyte {
         </T> */
         @JvmStatic
         fun <T> defaultIfNull(list: List<T>?): List<T> {
-            return list.orEmpty()
+            return list ?: ArrayList<T>()
         }
 
         @JvmStatic
