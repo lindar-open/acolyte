@@ -111,9 +111,12 @@ class ObjectsAcolyte {
                     } else {
                         continue
                     }
-                    if (secondObjStrippedMethodName == firstObjStrippedMethodName && secondObjMethodParamTypes[0].canonicalName == firstObjMethod.returnType.canonicalName) {
+                    if (sameNameAndType(firstObjStrippedMethodName, secondObjStrippedMethodName, firstObjMethod.returnType.canonicalName, secondObjMethodParamTypes[0].canonicalName)
+                            || sameNameAndEnumAndStringTypes(firstObjStrippedMethodName, secondObjStrippedMethodName, firstObjMethod.returnType.isEnum, secondObjMethodParamTypes[0].canonicalName)) {
                         try {
                             val firstObjMethodReturnValue = firstObjMethod.invoke(firstObject)
+
+                            // if we don't want to override then we check secondObjMethodReturnValue and if not null (a value exists) then we move on without changing the value
                             if (!override || ListsAcolyte.containsIgnoreCase(skipVariables, firstObjStrippedMethodName)) {
                                 try {
                                     val secondObjMethodReturnValue: Any?
@@ -130,9 +133,12 @@ class ObjectsAcolyte {
                                 } catch (ex: SecurityException) {
                                     logger.error { ex }
                                 }
-
                             }
-                            secondObjMethod.invoke(secondObject, firstObjMethod.returnType.cast(firstObjMethodReturnValue))
+                            if (enumAndStringTypes(firstObjMethod.returnType.isEnum, secondObjMethodParamTypes[0].canonicalName)) {
+                                secondObjMethod.invoke(secondObject, firstObjMethodReturnValue.toString())
+                            } else {
+                                secondObjMethod.invoke(secondObject, firstObjMethod.returnType.cast(firstObjMethodReturnValue))
+                            }
                         } catch (ex: IllegalAccessException) {
                             logger.error { ex }
                         } catch (ex: IllegalArgumentException) {
@@ -140,12 +146,26 @@ class ObjectsAcolyte {
                         } catch (ex: InvocationTargetException) {
                             logger.error { ex }
                         }
-
                     }
                 }
             }
 
             return secondObject
+        }
+
+        fun sameNameAndType(firstObjMethodName: String, secondObjMethodName: String,
+                                     firstObjMethodReturnClass: String, secondObjParamClass: String) : Boolean {
+            return secondObjMethodName == firstObjMethodName && secondObjParamClass == firstObjMethodReturnClass
+        }
+
+        fun sameNameAndEnumAndStringTypes(firstObjMethodName: String, secondObjMethodName: String,
+                isFirstObjMethodReturnTypeEnum: Boolean, secondObjMethodParamType: String): Boolean {
+            return secondObjMethodName == firstObjMethodName &&
+                    enumAndStringTypes(isFirstObjMethodReturnTypeEnum, secondObjMethodParamType)
+        }
+
+        fun enumAndStringTypes(isFirstObjMethodReturnTypeEnum: Boolean, secondObjMethodParamType: String): Boolean {
+            return isFirstObjMethodReturnTypeEnum && secondObjMethodParamType == String::class.java.canonicalName
         }
 
         /**
