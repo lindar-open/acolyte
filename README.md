@@ -16,7 +16,8 @@ Util classes:
     
 - NumbersAcolyte
     - **numberNullOrZero** and **numberGreaterThanZero**: check if number is null or equal to zero or number not null and greater than zero. Supports any number (extends Number) including BigDecimal, BigInteger, etc
-    
+
+- BigDecimalAcolyte
 - NumberFormatterAcolyte: helpful with formatting numbers and money
 - PasswordValidator
 - UsernameValidator
@@ -27,7 +28,7 @@ Usage:
 <dependency>
     <groupId>com.lindar</groupId>
     <artifactId>acolyte</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.3</version>
 </dependency>
 ```
 
