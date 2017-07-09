@@ -9,34 +9,34 @@ data class Tag (
         val shape: String,
         val hasArrow: Boolean
 ) : Serializable {
-    companion object {
+    companion object Builder {
             private var text = ""
             private var color = ""
             private var size = ""
             private var shape = ""
             private var hasArrow = false
 
-            fun text(text: String): Tag.Companion {
+            fun text(text: String): Tag.Builder {
                 this.text = text
                 return this
             }
 
-            fun color(color: String): Tag.Companion {
+            fun color(color: String): Tag.Builder {
                 this.color = color
                 return this
             }
 
-            fun size(size: String): Tag.Companion {
+            fun size(size: String): Tag.Builder {
                 this.size = size
                 return this
             }
 
-            fun shape(shape: String): Tag.Companion {
+            fun shape(shape: String): Tag.Builder {
                 this.shape = shape
                 return this
             }
 
-            fun hasArrow(hasArrow: Boolean): Tag.Companion {
+            fun hasArrow(hasArrow: Boolean): Tag.Builder {
                 this.hasArrow = hasArrow
                 return this
             }
