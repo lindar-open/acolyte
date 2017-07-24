@@ -23,6 +23,11 @@ class UrlAcolyte {
         }
 
         @JvmStatic
+        fun addParams(initialUrl: String, params: Map<String, String>): String {
+            return validateInitialUrl(initialUrl).run { this + params.map { it.key + EQUAL + it.value }.joinToString(AND) }
+        }
+
+        @JvmStatic
         fun addParam(initialUrl: String, paramName: String, paramValue: String): String {
             return validateInitialUrl(initialUrl).run { this + paramName + EQUAL + paramValue }
         }
