@@ -1,6 +1,6 @@
 package lindar.acolyte.vo
 
-data class PaginatedCollection<T> (val contents: List<T>, val pagination: PaginationVO, val sort: SortVO)
+data class PaginatedCollection<out T> (val contents: List<T>, val pagination: PaginationVO, val sort: SortVO)
 
 data class PaginationVO (val page: Int, val size: Int, val totalPages: Int, val totalElements: Long) {
     companion object Builder {
