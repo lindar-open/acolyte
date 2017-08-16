@@ -24,24 +24,29 @@ class UrlAcolyte {
 
         @JvmStatic
         fun addParams(initialUrl: String, params: Map<String, String>): String {
-            return validateInitialUrl(initialUrl).run { this + params.map { it.key + EQUAL + it.value }.joinToString(AND) }
+            val trimmedUrl = initialUrl.trim()
+            return validateInitialUrl(trimmedUrl).run { this + params.map { it.key + EQUAL + it.value }.joinToString(AND) }
         }
 
         @JvmStatic
         fun addParam(initialUrl: String, paramName: String, paramValue: String): String {
-            return validateInitialUrl(initialUrl).run { this + paramName + EQUAL + paramValue }
+            val trimmedUrl = initialUrl.trim()
+            return validateInitialUrl(trimmedUrl).run { this + paramName + EQUAL + paramValue }
         }
 
         @JvmStatic
         fun addSortParam(initialUrl: String, sort: SortVO): String {
-            return validateInitialUrl(initialUrl).run { this + buildSortPath(sort)}
+            val trimmedUrl = initialUrl.trim()
+            return validateInitialUrl(trimmedUrl).run { this + buildSortPath(sort)}
         }
 
         @JvmStatic
         fun safeConcat(initialUrl: String, path: String): String {
-            return if (initialUrl.endsWith(FOR_SLASH) && path.startsWith(FOR_SLASH))
-                initialUrl.removeSuffix(FOR_SLASH).plus(path)
-            else initialUrl.plus(path)
+            val trimmedUrl = initialUrl.trim()
+            val trimmedPath = path.trim()
+            return if (trimmedUrl.endsWith(FOR_SLASH) && trimmedPath.startsWith(FOR_SLASH))
+                trimmedUrl.removeSuffix(FOR_SLASH).plus(trimmedPath)
+            else trimmedUrl.plus(trimmedPath)
         }
 
         private fun buildSortPath(sort: SortVO): String {
