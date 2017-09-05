@@ -30,6 +30,7 @@ class UrlAcolyte {
         }
 
         @JvmStatic
+        @SafeVarargs
         fun addParams(initialUrl: String, vararg params: lindar.acolyte.vo.Pair<String, String>): String {
             val trimmedUrl = initialUrl.trim()
             return validateInitialUrl(trimmedUrl).run { this + params.map { it.key + EQUAL + it.value }.joinToString(AND) }
@@ -43,6 +44,7 @@ class UrlAcolyte {
         }
 
         @JvmStatic
+        @SafeVarargs
         fun addParamsIfNotBlank(initialUrl: String, vararg params: lindar.acolyte.vo.Pair<String, String>): String {
             val trimmedUrl = initialUrl.trim()
             return validateInitialUrl(trimmedUrl)
