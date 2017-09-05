@@ -1,5 +1,6 @@
 package lindar.acolyte.util
 
+import lindar.acolyte.extensions.notNullOrBlank
 import lindar.acolyte.vo.PageableVO
 import lindar.acolyte.vo.SortVO
 
@@ -13,7 +14,7 @@ class UrlAcolyte {
         private val QUESTION = "?"
         private val EQUAL = "="
         private val COMMA = ","
-        private val FOR_SLASH = "/"
+        private val SLASH = "/"
 
         @JvmStatic
         fun addPaginationParams(initialUrl: String, pageable: PageableVO): String {
@@ -26,6 +27,26 @@ class UrlAcolyte {
         fun addParams(initialUrl: String, params: Map<String, String>): String {
             val trimmedUrl = initialUrl.trim()
             return validateInitialUrl(trimmedUrl).run { this + params.map { it.key + EQUAL + it.value }.joinToString(AND) }
+        }
+
+        @JvmStatic
+        fun addParams(initialUrl: String, vararg params: lindar.acolyte.vo.Pair<String, String>): String {
+            val trimmedUrl = initialUrl.trim()
+            return validateInitialUrl(trimmedUrl).run { this + params.map { it.key + EQUAL + it.value }.joinToString(AND) }
+        }
+
+        @JvmStatic
+        fun addParamsIfNotBlank(initialUrl: String, params: Map<String, String?>): String {
+            val trimmedUrl = initialUrl.trim()
+            return validateInitialUrl(trimmedUrl)
+                    .run { this + params.filter { it.value.notNullOrBlank() }.map { it.key + EQUAL + it.value }.joinToString(AND) }
+        }
+
+        @JvmStatic
+        fun addParamsIfNotBlank(initialUrl: String, vararg params: lindar.acolyte.vo.Pair<String, String>): String {
+            val trimmedUrl = initialUrl.trim()
+            return validateInitialUrl(trimmedUrl)
+                    .run { this + params.filter { it.value.notNullOrBlank() }.map { it.key + EQUAL + it.value }.joinToString(AND) }
         }
 
         @JvmStatic
@@ -44,9 +65,11 @@ class UrlAcolyte {
         fun safeConcat(initialUrl: String, path: String): String {
             val trimmedUrl = initialUrl.trim()
             val trimmedPath = path.trim()
-            return if (trimmedUrl.endsWith(FOR_SLASH) && trimmedPath.startsWith(FOR_SLASH))
-                trimmedUrl.removeSuffix(FOR_SLASH).plus(trimmedPath)
-            else trimmedUrl.plus(trimmedPath)
+            return if (trimmedUrl.endsWith(SLASH) && trimmedPath.startsWith(SLASH))
+                trimmedUrl.removeSuffix(SLASH).plus(trimmedPath)
+            else if (trimmedUrl.endsWith(SLASH) || trimmedPath.startsWith(SLASH))
+                trimmedUrl.plus(trimmedPath)
+            else trimmedUrl.plus(SLASH).plus(trimmedPath)
         }
 
         private fun buildSortPath(sort: SortVO): String {
@@ -54,7 +77,7 @@ class UrlAcolyte {
         }
 
         private fun validateInitialUrl(initialUrl: String): String {
-            return initialUrl.removeSuffix(FOR_SLASH).run {
+            return initialUrl.removeSuffix(SLASH).run {
                 if (this.contains(QUESTION))
                     this + AND
                 else
