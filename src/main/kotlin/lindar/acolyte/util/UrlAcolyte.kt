@@ -64,6 +64,13 @@ class UrlAcolyte {
         }
 
         @JvmStatic
+        fun safeConcat(initialUrl: String, vararg paths: String): String {
+            var url = initialUrl
+            paths.forEach { url = safeConcat(url, it) }
+            return url
+        }
+
+        @JvmStatic
         fun safeConcat(initialUrl: String, path: String): String {
             val trimmedUrl = initialUrl.trim()
             val trimmedPath = path.trim()
