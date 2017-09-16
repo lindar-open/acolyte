@@ -1,23 +1,26 @@
 package lindar.acolyte.util
 
-import org.joda.time.DateTime
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Date
 
 object DateAcolyte {
-    private val ISO_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZZ"
+    private const val ISO_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZZ"
+    private val formatter = DateTimeFormatter.ofPattern(ISO_DATE_FORMAT)
 
     @JvmStatic
     fun currentTime(): String {
-        return DateTime.now().toString(ISO_DATE_FORMAT)
+        return LocalDateTime.now().format(formatter)
     }
 
     @JvmStatic
     fun formatDate(date: Date): String {
-        return DateTime(date).toString(ISO_DATE_FORMAT)
+        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).format(formatter)
     }
 
     @JvmStatic
-    fun formatDate(date: DateTime): String {
-        return date.toString(ISO_DATE_FORMAT)
+    fun formatDate(date: LocalDateTime): String {
+        return date.format(formatter)
     }
 }
