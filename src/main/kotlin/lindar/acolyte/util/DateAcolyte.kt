@@ -2,6 +2,7 @@ package lindar.acolyte.util
 
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
 
@@ -16,11 +17,20 @@ object DateAcolyte {
 
     @JvmStatic
     fun formatDate(date: Date): String {
-        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).format(formatter)
+        return ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).format(formatter)
     }
 
     @JvmStatic
     fun formatDate(date: LocalDateTime): String {
+        try {
+            return date.format(formatter)
+        } catch (e: Exception) {
+            return formatDate(date.atZone(ZoneId.systemDefault()))
+        }
+    }
+
+    @JvmStatic
+    fun formatDate(date: ZonedDateTime): String {
         return date.format(formatter)
     }
 }
