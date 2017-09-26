@@ -2,17 +2,30 @@ package lindar.acolyte.util
 
 import mu.KotlinLogging
 import java.lang.reflect.InvocationTargetException
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Optional
 
 class ObjectsAcolyte {
     companion object {
+
+        private val PRIMITIVES_TO_WRAPPERS = mapOf(
+                Boolean::class.javaPrimitiveType to Boolean::class.javaObjectType,
+                Byte::class.javaPrimitiveType to Byte::class.javaObjectType,
+                Char::class.javaPrimitiveType to Char::class.javaObjectType,
+                Double::class.javaPrimitiveType to Double::class.javaObjectType,
+                Float::class.javaPrimitiveType to Float::class.javaObjectType,
+                Int::class.javaPrimitiveType to Int::class.javaObjectType,
+                Long::class.javaPrimitiveType to Long::class.javaObjectType,
+                Short::class.javaPrimitiveType to Short::class.javaObjectType)
 
         private val SET_METHOD_PREFIX = "set"
         private val GET_METHOD_PREFIX = "get"
         private val IS_METHOD_PREFIX = "is"
 
         private val logger = KotlinLogging.logger {}
+
+        private fun <T> wrap(c: Class<T>): Class<T> {
+            return if (c.isPrimitive) PRIMITIVES_TO_WRAPPERS[c] as Class<T> else c
+        }
 
 
         /**
@@ -137,7 +150,7 @@ class ObjectsAcolyte {
                             if (enumAndStringTypes(firstObjMethod.returnType.isEnum, secondObjMethodParamTypes[0].canonicalName)) {
                                 secondObjMethod.invoke(secondObject, firstObjMethodReturnValue.toString())
                             } else {
-                                secondObjMethod.invoke(secondObject, firstObjMethod.returnType.cast(firstObjMethodReturnValue))
+                                secondObjMethod.invoke(secondObject, wrap(firstObjMethod.returnType).cast(firstObjMethodReturnValue))
                             }
                         } catch (ex: IllegalAccessException) {
                             logger.error { ex }
@@ -154,12 +167,12 @@ class ObjectsAcolyte {
         }
 
         fun sameNameAndType(firstObjMethodName: String, secondObjMethodName: String,
-                                     firstObjMethodReturnClass: String, secondObjParamClass: String) : Boolean {
+                            firstObjMethodReturnClass: String, secondObjParamClass: String): Boolean {
             return secondObjMethodName == firstObjMethodName && secondObjParamClass == firstObjMethodReturnClass
         }
 
         fun sameNameAndEnumAndStringTypes(firstObjMethodName: String, secondObjMethodName: String,
-                isFirstObjMethodReturnTypeEnum: Boolean, secondObjMethodParamType: String): Boolean {
+                                          isFirstObjMethodReturnTypeEnum: Boolean, secondObjMethodParamType: String): Boolean {
             return secondObjMethodName == firstObjMethodName &&
                     enumAndStringTypes(isFirstObjMethodReturnTypeEnum, secondObjMethodParamType)
         }
