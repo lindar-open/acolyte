@@ -49,7 +49,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <kotlin.version>1.1.4-3</kotlin.version>
+        <kotlin.version>1.2.0-beta-31</kotlin.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
     </properties>
 
@@ -163,4 +163,20 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>kotlin-milestones</id>
+            <name>Kotlin Milestones</name>
+            <url>http://dl.bintray.com/kotlin/kotlin-eap-1.2</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>kotlin-milestones</id>
+            <name>Kotlin Milestones</name>
+            <url>http://dl.bintray.com/kotlin/kotlin-eap-1.2</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
