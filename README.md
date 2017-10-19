@@ -28,7 +28,7 @@ Usage:
 <dependency>
     <groupId>com.lindar</groupId>
     <artifactId>acolyte</artifactId>
-    <version>1.2.3</version>
+    <version>1.3.4</version>
 </dependency>
 ```
 
