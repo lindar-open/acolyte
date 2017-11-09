@@ -1,7 +1,6 @@
 package lindar.acolyte.extensions
 
 import java.util.*
-import java.util.function.Predicate
 import kotlin.collections.ArrayList
 
 
@@ -44,5 +43,18 @@ fun <T> MutableCollection<T>.removeAllAndRetrieveFirst(filter: (T) -> Boolean): 
         }
     }
     return removedItems.firstOrNull()
+}
+
+fun <T> MutableCollection<T>.addIfUnique(uniqueFilter: (T) -> Boolean, item: T): Boolean {
+    return this.none(uniqueFilter).ifTrue {
+        this.add(item)
+    } ?: false
+}
+
+fun <T> MutableCollection<T>.addIfUniqueAndRetrieveCollection(uniqueFilter: (T) -> Boolean, item: T): MutableCollection<T> {
+    this.none(uniqueFilter).ifTrue {
+        this.add(item)
+    }
+    return this
 }
 
