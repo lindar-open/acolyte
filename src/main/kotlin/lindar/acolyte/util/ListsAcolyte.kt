@@ -42,17 +42,17 @@ class ListsAcolyte {
          * @return
         </T> */
         @JvmStatic
-        fun <T> defaultIfNull(list: List<T>?): List<T> {
+        fun <T> defaultIfNull(list: MutableList<T>?): MutableList<T> {
             return list ?: ArrayList<T>()
         }
 
         @JvmStatic
-        fun <T> defaultIfNull(list: List<T>?, defaultVal: List<T>): List<T> {
+        fun <T> defaultIfNull(list: MutableList<T>?, defaultVal: MutableList<T>): MutableList<T> {
             return list ?: defaultVal
         }
 
         @JvmStatic
-        fun <T> defaultIfEmpty(list: List<T>?, defaultVal: List<T>): List<T> {
+        fun <T> defaultIfEmpty(list: MutableList<T>?, defaultVal: MutableList<T>): MutableList<T> {
             return if (list == null || list.isEmpty()) defaultVal else list
         }
     }
