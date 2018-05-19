@@ -11,11 +11,10 @@ class NumberFormatterAcolyte {
         private val DECIMAL_FORMAT_NO_COMMA = DecimalFormat("###0.00")
         private val DECIMAL_FORMAT_NO_EXTRA_DIGITS_NO_COMMA = DecimalFormat("###0.##")
 
-        private val POUND_SIGN = "£"
-        private val PENNY_SIGN = "p"
+        private const val POUND_SIGN = "£"
+        private const val PENNY_SIGN = "p"
 
-        @JvmStatic
-        fun formatNumberWithoutComma(number: Number?): String {
+        @JvmStatic fun formatNumberWithoutComma(number: Number?): String {
             if (number == null) {
                 return 0.toString()
             }
@@ -25,8 +24,7 @@ class NumberFormatterAcolyte {
             return remove0Decimals(DECIMAL_FORMAT_NO_COMMA.format(number))
         }
 
-        @JvmStatic
-        fun formatNumber(number: Number?): String {
+        @JvmStatic fun formatNumber(number: Number?): String {
             if (number == null) {
                 return 0.toString()
             }
@@ -36,13 +34,11 @@ class NumberFormatterAcolyte {
             return remove0Decimals(DECIMAL_FORMAT.format(number))
         }
 
-        @JvmStatic
-        fun formatNumber(prefix: String, number: Number): String {
+        @JvmStatic fun formatNumber(prefix: String, number: Number): String {
             return prefix + formatNumber(number)
         }
 
-        @JvmStatic
-        fun formatNumber(number: Number, suffix: String): String {
+        @JvmStatic fun formatNumber(number: Number, suffix: String): String {
             return formatNumber(number) + suffix
         }
 
@@ -53,8 +49,7 @@ class NumberFormatterAcolyte {
             return number
         }
 
-        @JvmStatic
-        fun formatMoney(amount: Number): String {
+        @JvmStatic fun formatMoney(amount: Number): String {
             val amountDoubleVal = amount.toDouble()
             if (amountDoubleVal == 0.0) {
                 return "0"
@@ -65,8 +60,7 @@ class NumberFormatterAcolyte {
             return PENNY_SIGN + DECIMAL_FORMAT.format(amountDoubleVal * 100)
         }
 
-        @JvmStatic
-        fun formatNumber(amount: String): String {
+        @JvmStatic fun formatNumber(amount: String): String {
             if (amount.toDoubleOrNull() == null) {
                 return 0.toString()
             }
@@ -80,18 +74,15 @@ class NumberFormatterAcolyte {
             return formatNumber(amountDoubleVal)
         }
 
-        @JvmStatic
-        fun formatMoney(amount: String): String {
+        @JvmStatic fun formatMoney(amount: String): String {
             return POUND_SIGN + formatNumber(amount)
         }
 
-        @JvmStatic
-        fun addAndFormatMoney(firstAmount: String, secondAmount: String): String {
+        @JvmStatic fun addAndFormatMoney(firstAmount: String, secondAmount: String): String {
             return POUND_SIGN + addAndFormatNumber(firstAmount, secondAmount)
         }
 
-        @JvmStatic
-        fun addAndFormatNumber(firstAmount: String, secondAmount: String): String {
+        @JvmStatic fun addAndFormatNumber(firstAmount: String, secondAmount: String): String {
             var firstAmountDoubleVal: Double
             var secondAmountDoubleVal: Double
 

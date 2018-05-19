@@ -25,62 +25,51 @@ class UrlAcolyte {
          * An example would be: initialUrl?page=1&size=10&sort=createdAt,desc&sort=name,asc . <br/>
          * Yes, you can add multiple sort params, each with its own order (direction)
          */
-        @JvmStatic
-        fun addPaginationParams(initialUrl: String, pageable: PageableVO): String {
+        @JvmStatic fun addPaginationParams(initialUrl: String, pageable: PageableVO): String {
             val finalUrl = addParam(initialUrl, PAGE_PARAM, pageable.page.toString())
                     .run{addParam(this, SIZE_PARAM, pageable.size.toString())}
             return finalUrl + (pageable.sort?.let { AND + it.map { buildSortPath(it) }.joinToString(AND)} ?: "")
         }
 
-        @JvmStatic
-        fun addParams(initialUrl: String, params: Map<String, String>): String {
+        @JvmStatic fun addParams(initialUrl: String, params: Map<String, String>): String {
             val trimmedUrl = initialUrl.trim()
             return validateInitialUrl(trimmedUrl).run { this + params.map { it.key + EQUAL + it.value }.joinToString(AND) }
         }
 
-        @JvmStatic
-        @SafeVarargs
-        fun addParams(initialUrl: String, vararg params: lindar.acolyte.vo.Pair<String, String>): String {
+        @JvmStatic @SafeVarargs fun addParams(initialUrl: String, vararg params: lindar.acolyte.vo.Pair<String, String>): String {
             val trimmedUrl = initialUrl.trim()
             return validateInitialUrl(trimmedUrl).run { this + params.map { it.key + EQUAL + it.value }.joinToString(AND) }
         }
 
-        @JvmStatic
-        fun addParamsIfNotBlank(initialUrl: String, params: Map<String, String?>): String {
+        @JvmStatic fun addParamsIfNotBlank(initialUrl: String, params: Map<String, String?>): String {
             val trimmedUrl = initialUrl.trim()
             return validateInitialUrl(trimmedUrl)
                     .run { this + params.filter { it.value.notNullOrBlank() }.map { it.key + EQUAL + it.value }.joinToString(AND) }
         }
 
-        @JvmStatic
-        @SafeVarargs
-        fun addParamsIfNotBlank(initialUrl: String, vararg params: lindar.acolyte.vo.Pair<String, String>): String {
+        @JvmStatic @SafeVarargs fun addParamsIfNotBlank(initialUrl: String, vararg params: lindar.acolyte.vo.Pair<String, String>): String {
             val trimmedUrl = initialUrl.trim()
             return validateInitialUrl(trimmedUrl)
                     .run { this + params.filter { it.value.notNullOrBlank() }.map { it.key + EQUAL + it.value }.joinToString(AND) }
         }
 
-        @JvmStatic
-        fun addParam(initialUrl: String, paramName: String, paramValue: String): String {
+        @JvmStatic fun addParam(initialUrl: String, paramName: String, paramValue: String): String {
             val trimmedUrl = initialUrl.trim()
             return validateInitialUrl(trimmedUrl).run { this + paramName + EQUAL + paramValue }
         }
 
-        @JvmStatic
-        fun addSortParam(initialUrl: String, sort: SortVO): String {
+        @JvmStatic fun addSortParam(initialUrl: String, sort: SortVO): String {
             val trimmedUrl = initialUrl.trim()
             return validateInitialUrl(trimmedUrl).run { this + buildSortPath(sort)}
         }
 
-        @JvmStatic
-        fun safeConcat(initialUrl: String, vararg paths: String): String {
+        @JvmStatic fun safeConcat(initialUrl: String, vararg paths: String): String {
             var trimmedUrl = initialUrl.trim()
             paths.forEach { trimmedUrl = safeConcat(trimmedUrl, it) }
             return trimmedUrl
         }
 
-        @JvmStatic
-        fun safeConcat(initialUrl: String, path: String): String {
+        @JvmStatic fun safeConcat(initialUrl: String, path: String): String {
             val trimmedUrl = initialUrl.trim()
             val trimmedPath = path.trim()
             return if (trimmedUrl.endsWith(SLASH) && trimmedPath.startsWith(SLASH))
@@ -97,8 +86,7 @@ class UrlAcolyte {
          * You can also replace path params by using an actual param name, this way you don't have to send the values in order.
          * For this check: {UrlAcolyte.replacePathParamsByName}
          */
-        @JvmStatic
-        fun addPathParams(initialUrl: String, vararg paramValues: String): String {
+        @JvmStatic fun addPathParams(initialUrl: String, vararg paramValues: String): String {
             var trimmedUrl = initialUrl.trim()
             paramValues.forEach { trimmedUrl = trimmedUrl.replaceFirst(PATH_PARAM_BOTH, it) }
             return trimmedUrl
@@ -111,8 +99,7 @@ class UrlAcolyte {
          * You can also replace path params by using an actual param name, this way you don't have to send the values in order.
          * For this check: {UrlAcolyte.replacePathParamsByName}
          */
-        @JvmStatic
-        fun addPathParams(initialUrl: String, paramValues: List<String>): String {
+        @JvmStatic fun addPathParams(initialUrl: String, paramValues: List<String>): String {
             var trimmedUrl = initialUrl.trim()
             paramValues.forEach { trimmedUrl = trimmedUrl.replaceFirst(PATH_PARAM_BOTH, it) }
             return trimmedUrl
@@ -126,8 +113,7 @@ class UrlAcolyte {
          * You can also add path params without using actual param names, just an identifier.
          * For this check: {UrlAcolyte.addPathParams}
          */
-        @JvmStatic
-        fun replacePathParamsByName(initialUrl: String, params: Map<String, String>): String {
+        @JvmStatic fun replacePathParamsByName(initialUrl: String, params: Map<String, String>): String {
             var trimmedUrl = initialUrl.trim()
             params.forEach { trimmedUrl = trimmedUrl.replace(PATH_PARAM_LEFT + it.key + PATH_PARAM_RIGHT, it.value.trim(), ignoreCase = true) }
             return trimmedUrl
@@ -140,8 +126,7 @@ class UrlAcolyte {
          * You can also add path params without using actual param names, just an identifier.
          * For this check: {UrlAcolyte.addPathParams}
          */
-        @JvmStatic
-        fun replacePathParamsByName(initialUrl: String, vararg params: lindar.acolyte.vo.Pair<String, String>): String {
+        @JvmStatic fun replacePathParamsByName(initialUrl: String, vararg params: lindar.acolyte.vo.Pair<String, String>): String {
             var trimmedUrl = initialUrl.trim()
             params.forEach { trimmedUrl = trimmedUrl.replace(PATH_PARAM_LEFT + it.key + PATH_PARAM_RIGHT, it.value.trim(), ignoreCase = true) }
             return trimmedUrl
