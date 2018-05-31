@@ -5,7 +5,7 @@ import java.text.ParseException
 
 class NumberFormatterAcolyte {
     companion object {
-        private val DECIMAL_FORMAT = DecimalFormat("#,##0.00")
+        private val DECIMAL_FORMAT = DecimalFormat("#,##0.00####")
         private val DECIMAL_FORMAT_NO_EXTRA_DIGITS = DecimalFormat("#,##0.######")
 
         private val DECIMAL_FORMAT_NO_COMMA = DecimalFormat("###0.00")
@@ -24,58 +24,67 @@ class NumberFormatterAcolyte {
             return remove0Decimals(DECIMAL_FORMAT_NO_COMMA.format(number))
         }
 
+        @JvmStatic fun formatNumber(prefix: String?, number: Number?): String {
+            return prefix.orEmpty() + formatNumber(number, DECIMAL_FORMAT)
+        }
+
+        @JvmStatic fun formatNumber(number: Number?, suffix: String?): String {
+            return formatNumber(number, DECIMAL_FORMAT) + suffix
+        }
+
         @JvmStatic fun formatNumber(number: Number?): String {
+            return formatNumber(number, DECIMAL_FORMAT)
+        }
+
+        @JvmStatic fun formatNumber(number: Number?, decimalFormat: DecimalFormat): String {
             if (number == null) {
                 return 0.toString()
             }
             if (number.toDouble() % 1 == 0.0) {
                 return DECIMAL_FORMAT_NO_EXTRA_DIGITS.format(number)
             }
-            return remove0Decimals(DECIMAL_FORMAT.format(number))
-        }
-
-        @JvmStatic fun formatNumber(prefix: String?, number: Number?): String {
-            return prefix.orEmpty() + formatNumber(number)
-        }
-
-        @JvmStatic fun formatNumber(number: Number?, suffix: String?): String {
-            return formatNumber(number) + suffix.orEmpty()
-        }
-
-        private fun remove0Decimals(number: String?): String {
-            if (number != null && number.matches(""".\.0+""".toRegex())) {
-                return number.substring(0, number.lastIndexOf('.'))
-            }
-            return number.orEmpty()
-        }
-
-        @JvmStatic fun formatMoney(amount: Number?): String {
-            if (amount == null || amount.toDouble() == 0.0) {
-                return 0.toString()
-            }
-            val amountDoubleVal = amount.toDouble()
-            if (amountDoubleVal >= 1) {
-                return POUND_SIGN + formatNumber(amount)
-            }
-            return PENNY_SIGN + DECIMAL_FORMAT.format(amountDoubleVal * 100)
+            return remove0Decimals(decimalFormat.format(number))
         }
 
         @JvmStatic fun formatNumber(amount: String?): String {
-            if (amount == null || amount.toDoubleOrNull() == null) {
+            return formatNumber(amount, DECIMAL_FORMAT)
+        }
+
+        @JvmStatic fun formatNumber(amount: String?, decimalFormat: DecimalFormat): String {
+            if (amount?.toDoubleOrNull() == null) {
                 return 0.toString()
             }
             var amountDoubleVal: Double?
             try {
-                amountDoubleVal = DECIMAL_FORMAT.parse(amount).toDouble()
+                amountDoubleVal = decimalFormat.parse(amount).toDouble()
             } catch (pe: ParseException) {
                 amountDoubleVal = 0.toDouble()
             }
-
-            return formatNumber(amountDoubleVal)
+            return formatNumber(amountDoubleVal, decimalFormat)
         }
 
+
         @JvmStatic fun formatMoney(amount: String?): String {
-            return POUND_SIGN + formatNumber(amount)
+            return formatMoney(amount, DECIMAL_FORMAT)
+        }
+
+        @JvmStatic fun formatMoney(amount: String?, decimalFormat: DecimalFormat): String {
+            return POUND_SIGN + formatNumber(amount, decimalFormat)
+        }
+
+        @JvmStatic fun formatMoney(amount: Number?): String {
+            return formatMoney(amount, DECIMAL_FORMAT)
+        }
+
+        @JvmStatic fun formatMoney(amount: Number?, decimalFormat: DecimalFormat): String {
+            val amountDoubleVal = amount?.toDouble()
+            if (amountDoubleVal == null || amountDoubleVal == 0.0) {
+                return 0.toString()
+            }
+            if (amountDoubleVal >= 1) {
+                return POUND_SIGN + formatNumber(amount, decimalFormat)
+            }
+            return PENNY_SIGN + DECIMAL_FORMAT.format(amountDoubleVal * 100)
         }
 
         @JvmStatic fun addAndFormatMoney(firstAmount: String?, secondAmount: String?): String {
@@ -110,5 +119,16 @@ class NumberFormatterAcolyte {
 
             return formatNumber(firstAmountDoubleVal + secondAmountDoubleVal)
         }
+
+        private fun remove0Decimals(number: String?): String {
+            if (number != null && number.matches(""".\.0+""".toRegex())) {
+                return number.substring(0, number.lastIndexOf('.'))
+            }
+            return number.orEmpty()
+        }
     }
 }
+
+
+
+
