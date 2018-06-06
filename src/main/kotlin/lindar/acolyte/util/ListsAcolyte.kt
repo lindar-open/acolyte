@@ -4,6 +4,16 @@ import java.util.Optional
 
 class ListsAcolyte {
     companion object {
+
+        @JvmStatic fun <T> listOf(vararg elements: T): List<T> {
+            return listOf(*elements)
+        }
+
+        @JvmStatic fun <T> arrayListOf(vararg elements: T): MutableList<T> {
+            return mutableListOf(*elements)
+        }
+
+
         @JvmStatic fun containsIgnoreCase(list: List<String>?, item: String?): Boolean {
             return list.orEmpty().filter { str -> str.equals(item, ignoreCase = true) }.any()
         }
