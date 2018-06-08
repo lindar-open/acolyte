@@ -8,7 +8,7 @@ class MapsAcolyte {
          */
         @JvmStatic @SafeVarargs
         fun <K, V> mapOf(vararg pairs: lindar.acolyte.vo.Pair<K, V>): Map<K, V> {
-            return mapOf(*pairs.map { Pair(it.key, it.value) }.toTypedArray())
+            return kotlin.collections.mapOf(*pairs.map { Pair(it.key, it.value) }.toTypedArray())
         }
 
         /**
@@ -16,7 +16,7 @@ class MapsAcolyte {
          */
         @JvmStatic @SafeVarargs
         fun <K, V> hashMapOf(vararg pairs: lindar.acolyte.vo.Pair<K, V>): Map<K, V> {
-            return hashMapOf(*pairs.map { Pair(it.key, it.value) }.toTypedArray())
+            return kotlin.collections.hashMapOf(*pairs.map { Pair(it.key, it.value) }.toTypedArray())
         }
 
 

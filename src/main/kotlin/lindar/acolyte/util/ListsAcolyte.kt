@@ -6,11 +6,11 @@ class ListsAcolyte {
     companion object {
 
         @JvmStatic fun <T> listOf(vararg elements: T): List<T> {
-            return listOf(*elements)
+            return kotlin.collections.listOf(*elements)
         }
 
         @JvmStatic fun <T> arrayListOf(vararg elements: T): MutableList<T> {
-            return mutableListOf(*elements)
+            return kotlin.collections.mutableListOf(*elements)
         }
 
 

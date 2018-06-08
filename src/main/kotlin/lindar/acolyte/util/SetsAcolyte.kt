@@ -4,15 +4,15 @@ class SetsAcolyte {
     companion object {
 
         @JvmStatic fun <T> setOf(vararg elements: T): Set<T> {
-            return setOf(*elements)
+            return kotlin.collections.setOf(*elements)
         }
 
         @JvmStatic fun <T> hashSetOf(vararg elements: T): MutableSet<T> {
-            return hashSetOf(*elements)
+            return kotlin.collections.hashSetOf(*elements)
         }
 
         @JvmStatic fun <T> linkedHashSetOf(vararg elements: T): MutableSet<T> {
-            return mutableSetOf(*elements)
+            return kotlin.collections.mutableSetOf(*elements)
         }
 
 
@@ -58,4 +58,9 @@ class SetsAcolyte {
             return set?.asSequence()?.filter { it != null }?.take(2)?.count() == 1
         }
     }
+}
+
+fun main(args: Array<String>) {
+    println(ListsAcolyte.listOf("", "dfsa", "dasfas"))
+//    println(SetsAcolyte.setOf("", "dfsa", "dasfas"))
 }
