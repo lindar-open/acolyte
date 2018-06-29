@@ -2,7 +2,6 @@ package lindar.acolyte.util
 
 import mu.KotlinLogging
 import java.lang.reflect.InvocationTargetException
-import java.util.Optional
 
 class ObjectsAcolyte {
     companion object {
@@ -28,47 +27,11 @@ class ObjectsAcolyte {
         }
 
 
-        /**
-         * Go through all the setters of the second object and try to find a getter in the first object that matches the name and has the same return value as the setter's parameter type.
-         * If override is set to false then for each setter of the second method, its own getter is checked and if the value returned is not null or empty (for collections) then the setter invoking is skipped.
-         * Ignores every other method that is NOT public, setter or getter.
-
-         * On top of this there might be cases when you want to have override set to true but skip certain variables like the **id**.
-         * You can do so by providing a list of string with the variables names. For this use the other overloaded method
-
-         * Returns the second object with the new values
-
-         * Default: override is set to true
-
-         * @param fromObject
-         * *
-         * @param toObject
-         * *
-         * @return Returns the second object with the new values
-         */
         @JvmStatic
         fun <T : Any> copy(fromObject: Any, toObject: T): T {
             return copy(fromObject, toObject, true, ArrayList<String>(0))
         }
 
-        /**
-         * Go through all the setters of the second object and try to find a getter in the first object that matches the name and has the same return value as the setter's parameter type.
-         * If override is set to false then for each setter of the second method, its own getter is checked and if the value returned is not null or empty (for collections) then the setter invoking is skipped.
-         * Ignores every other method that is NOT public, setter or getter.
-
-         * On top of this there might be cases when you want to have override set to true but skip certain variables like the **id**.
-         * You can do so by providing a list of string with the variables names. For this use the other overloaded method
-
-         * Returns the second object with the new values
-
-         * @param fromObject
-         * *
-         * @param toObject
-         * *
-         * @param override
-         * *
-         * @return Returns the second object with the new values
-         */
         @JvmStatic
         fun <T : Any> copy(fromObject: Any, toObject: T, override: Boolean): T {
             return copy(fromObject, toObject, override, ArrayList<String>(0))
@@ -78,24 +41,13 @@ class ObjectsAcolyte {
          * Go through all the setters of the second object and try to find a getter in the first object that matches the name and has the same return value as the setter's parameter type.
          * If override is set to false then for each setter of the second method, its own getter is checked and if the value returned is not null or empty (for collections) then the setter invoking is skipped.
          * Ignores every other method that is NOT public, setter or getter.
-
          * On top of this there might be cases when you want to have override set to true but skip certain variables like the **id**.
          * You can do so by providing a list of string with the variables names.
-
          * Returns the second object with the new values
-
-         * @param fromObject
-         * *
-         * @param toObject
-         * *
-         * @param override
-         * *
-         * @param skipVariables
-         * *
          * @return Returns the second object with the new values
          */
         @JvmStatic
-        fun <T : Any> copy(fromObject: Any, toObject: T, override: Boolean, skipVariables: List<String>): T {
+        fun <T : Any> copy(fromObject: Any, toObject: T, override: Boolean = true, skipVariables: List<String> = ArrayList()): T {
 
             val firstObjMethods = fromObject.javaClass.methods
             val secondObjMethods = toObject.javaClass.methods
@@ -179,70 +131,6 @@ class ObjectsAcolyte {
         fun enumAndStringTypes(isFirstObjMethodReturnTypeEnum: Boolean, secondObjMethodParamType: String): Boolean {
             return isFirstObjMethodReturnTypeEnum && secondObjMethodParamType == String::class.java.canonicalName
         }
-
-
-        /**
-         * Create an object of the second object class and go through all the setters and try to find a getter in the first object that matches the name and has the same return value as the setter's parameter type.
-         * If override is set to false then for each setter of the second method, its own getter is checked and if the value returned is not null or empty (for collections) then the setter invoking is skipped.
-         * Ignores every other method that is NOT public, setter or getter.
-
-         * On top of this there might be cases when you want to have override set to true but skip certain variables like the **id**.
-         * You can do so by providing a list of string with the variables names. For this use the other overloaded method
-
-         * Returns the created second object with the new values.
-
-         * @param firstObject
-         * *
-         * @param secondObjectClass
-         * *
-         * @param override
-         * *
-         * @return Returns the created second object with the new values
-         */
-        @JvmStatic fun <T : Any> copy(firstObject: Any, secondObjectClass: Class<T>, override: Boolean): Optional<T> {
-            return copy(firstObject, secondObjectClass, override, ArrayList<String>(0))
-        }
-
-        /**
-         * Create an object of the second object class and go through all the setters and try to find a getter in the first object that matches the name and has the same return value as the setter's parameter type.
-         * If override is set to false then for each setter of the second method, its own getter is checked and if the value returned is not null or empty (for collections) then the setter invoking is skipped.
-         * Ignores every other method that is NOT public, setter or getter.
-
-         * On top of this there might be cases when you want to have override set to true but skip certain variables like the **id**.
-         * You can do so by providing a list of string with the variables names.
-
-         * Returns the created second object with the new values.
-
-         * @param firstObject
-         * *
-         * @param secondObjectClass
-         * *
-         * @param override
-         * *
-         * @param skipVariables
-         * *
-         * @return Returns the created second object with the new values
-         */
-        @JvmStatic fun <T : Any> copy(firstObject: Any, secondObjectClass: Class<T>, override: Boolean, skipVariables: List<String>): Optional<T> {
-            try {
-                val emptyConstructor = secondObjectClass.constructors.find { it.parameterCount == 0 }
-                val secondObject = if (emptyConstructor != null) emptyConstructor.newInstance() else instantiateConstructorWithArgs(firstObject, secondObjectClass)
-                return Optional.of(copy(firstObject, secondObject as T, override, skipVariables))
-            } catch (ex: InstantiationException) {
-                logger.error { ex }
-            } catch (ex: IllegalAccessException) {
-                logger.error { ex }
-            }
-
-            return Optional.empty<T>()
-        }
-
-        private fun <T: Any> instantiateConstructorWithArgs(firstObject: Any, secondObjectClass: Class<T>): Any? {
-            val longestConstructor = secondObjectClass.constructors.sortedByDescending { it.parameterCount }.first()
-            val fieldValues = firstObject.javaClass.declaredFields.map { it.isAccessible = true; it.get(firstObject) }.subList(0, longestConstructor.parameterCount).toTypedArray()
-            return longestConstructor.newInstance(*fieldValues)
-        }
-
 
         /**
          * This method returns all public variables that have a getter including the
