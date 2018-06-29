@@ -65,7 +65,7 @@ class NumberFormatterAcolyte {
 
 
         @JvmStatic fun formatMoney(amount: String?): String {
-            return formatMoney(amount, DECIMAL_FORMAT)
+            return formatMoney(amount, DECIMAL_FORMAT_NO_EXTRA_DIGITS)
         }
 
         @JvmStatic fun formatMoney(amount: String?, decimalFormat: DecimalFormat): String {
@@ -73,7 +73,7 @@ class NumberFormatterAcolyte {
         }
 
         @JvmStatic fun formatMoney(amount: Number?): String {
-            return formatMoney(amount, DECIMAL_FORMAT)
+            return formatMoney(amount, DECIMAL_FORMAT_NO_EXTRA_DIGITS)
         }
 
         @JvmStatic fun formatMoney(amount: Number?, decimalFormat: DecimalFormat): String {
@@ -84,7 +84,7 @@ class NumberFormatterAcolyte {
             if (amountDoubleVal >= 1) {
                 return POUND_SIGN + formatNumber(amount, decimalFormat)
             }
-            return PENNY_SIGN + DECIMAL_FORMAT.format(amountDoubleVal * 100)
+            return decimalFormat.format(amountDoubleVal * 100) + PENNY_SIGN
         }
 
         @JvmStatic fun addAndFormatMoney(firstAmount: String?, secondAmount: String?): String {
