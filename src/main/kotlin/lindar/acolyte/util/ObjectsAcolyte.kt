@@ -16,9 +16,9 @@ class ObjectsAcolyte {
                 Long::class.javaPrimitiveType to Long::class.javaObjectType,
                 Short::class.javaPrimitiveType to Short::class.javaObjectType)
 
-        private val SET_METHOD_PREFIX = "set"
-        private val GET_METHOD_PREFIX = "get"
-        private val IS_METHOD_PREFIX = "is"
+        private const val SET_METHOD_PREFIX = "set"
+        private const val GET_METHOD_PREFIX = "get"
+        private const val IS_METHOD_PREFIX = "is"
 
         private val logger = KotlinLogging.logger {}
 
@@ -81,15 +81,18 @@ class ObjectsAcolyte {
                         try {
                             val firstObjMethodReturnValue = firstObjMethod.invoke(fromObject)
 
+                            if (ListsAcolyte.containsIgnoreCase(skipVariables, firstObjStrippedMethodName)) {
+                                continue
+                            }
                             // if we don't want to override then we check secondObjMethodReturnValue and if not null (a value exists) then we move on without changing the value
-                            if (!override || ListsAcolyte.containsIgnoreCase(skipVariables, firstObjStrippedMethodName)) {
+                            if (!override) {
                                 try {
                                     val secondObjMethodReturnValue = if (booleanMethod) {
                                         toObject.javaClass.getMethod(IS_METHOD_PREFIX + secondObjStrippedMethodName).invoke(toObject)
                                     } else {
                                         toObject.javaClass.getMethod(GET_METHOD_PREFIX + secondObjStrippedMethodName).invoke(toObject)
                                     }
-                                    if (!objectNullOrEmpty(secondObjMethodReturnValue)) {
+                                    if (!override && !objectNullOrEmpty(secondObjMethodReturnValue)) {
                                         continue
                                     }
                                 } catch (ex: NoSuchMethodException) {
