@@ -3,6 +3,7 @@ package lindar.acolyte.util
 import java.text.DecimalFormat
 import java.text.ParseException
 
+@Deprecated(message = "Use NumberFormatAcolyte instead")
 class NumberFormatterAcolyte {
     companion object {
         private val DECIMAL_FORMAT = DecimalFormat("#,##0.00####")
