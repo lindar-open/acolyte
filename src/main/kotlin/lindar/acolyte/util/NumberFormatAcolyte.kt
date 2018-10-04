@@ -128,8 +128,7 @@ class NumberFormatAcolyte {
     }
 
     fun formatToNull(number: Number?): String? {
-        number?.toDouble() ?: return null
-        return format(number)
+        return number?.let { format(it) }
     }
 
     fun format(number: Number?): String {
