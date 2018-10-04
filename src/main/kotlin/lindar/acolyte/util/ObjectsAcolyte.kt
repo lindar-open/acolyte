@@ -92,7 +92,7 @@ class ObjectsAcolyte {
                                     } else {
                                         toObject.javaClass.getMethod(GET_METHOD_PREFIX + secondObjStrippedMethodName).invoke(toObject)
                                     }
-                                    if (!override && !objectNullOrEmpty(secondObjMethodReturnValue)) {
+                                    if (!objectNullOrEmpty(secondObjMethodReturnValue)) {
                                         continue
                                     }
                                 } catch (ex: NoSuchMethodException) {

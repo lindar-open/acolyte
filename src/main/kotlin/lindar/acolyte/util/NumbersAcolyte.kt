@@ -64,6 +64,14 @@ class NumbersAcolyte {
             return number != null && number.toDouble() >= 0.0
         }
 
+        @JvmStatic fun greaterThanOne(number: Number?): Boolean {
+            return number != null && number.toDouble() > 1.0
+        }
+
+        @JvmStatic fun equalOrGreaterThanOne(number: Number?): Boolean {
+            return number != null && number.toDouble() >= 1.0
+        }
+
         @JvmStatic fun greaterThan(initialNumber: Number?, comparingNumber: Number): Boolean {
             return initialNumber != null && initialNumber.toDouble() > comparingNumber.toDouble()
         }
@@ -79,6 +87,14 @@ class NumbersAcolyte {
 
         @JvmStatic fun equalOrLessThanZero(number: Number?): Boolean {
             return number != null && number.toDouble() <= 0.0
+        }
+
+        @JvmStatic fun lessThanOne(number: Number?): Boolean {
+            return number != null && number.toDouble() < 1.0
+        }
+
+        @JvmStatic fun equalOrLessThanOne(number: Number?): Boolean {
+            return number != null && number.toDouble() <= 1.0
         }
 
         @JvmStatic fun lessThan(initialNumber: Number?, comparingNumber: Number): Boolean {
