@@ -131,6 +131,10 @@ class NumberFormatAcolyte {
         return number?.let { format(it) }
     }
 
+    fun formatOrDefault(number: Number?, defaultValue: String): String {
+        return if (number != null) format(number) else defaultValue
+    }
+
     fun format(number: Number?): String {
         val amountDoubleVal = number?.toDouble() ?: return 0.toString()
 
