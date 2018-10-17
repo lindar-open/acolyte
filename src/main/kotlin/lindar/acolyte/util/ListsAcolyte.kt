@@ -14,8 +14,16 @@ class ListsAcolyte {
         }
 
 
-        @JvmStatic fun containsIgnoreCase(list: List<String>?, item: String?): Boolean {
-            return list.orEmpty().filter { str -> str.equals(item, ignoreCase = true) }.any()
+        @JvmStatic fun containsIgnoreCase(list: List<String?>?, item: String?): Boolean {
+            return list.orEmpty().any { str -> str.equals(item, ignoreCase = true) }
+        }
+
+        @JvmStatic fun containsAnyIgnoreCase(list: List<String?>?, vararg items: String?): Boolean {
+            return list.orEmpty().any { str -> items.any { it.equals(str, ignoreCase = true) } }
+        }
+
+        @JvmStatic fun containsAllIgnoreCase(list: List<String?>?, vararg items: String?): Boolean {
+            return list.orEmpty().all { str -> items.any { it.equals(str, ignoreCase = true) } }
         }
 
         /**
