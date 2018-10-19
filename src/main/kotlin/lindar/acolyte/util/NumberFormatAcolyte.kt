@@ -71,6 +71,12 @@ class NumberFormatAcolyte {
         return this
     }
 
+    fun wholeNumber(): NumberFormatAcolyte {
+        minFractionDigits = 0
+        maxFractionDigits = 0
+        return this
+    }
+
     fun fractionDigits(digits: Int): NumberFormatAcolyte {
         minFractionDigits = digits
         maxFractionDigits = digits
