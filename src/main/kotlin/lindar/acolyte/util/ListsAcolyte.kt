@@ -23,7 +23,7 @@ class ListsAcolyte {
         }
 
         @JvmStatic fun containsAllIgnoreCase(list: List<String?>?, vararg items: String?): Boolean {
-            return list.orEmpty().all { str -> items.any { it.equals(str, ignoreCase = true) } }
+            return items.all{str -> list.orEmpty().any{it.equals(str, ignoreCase = true)}}
         }
 
         /**
