@@ -26,6 +26,10 @@ class ListsAcolyte {
             return items.all{str -> list.orEmpty().any{it.equals(str, ignoreCase = true)}}
         }
 
+        @JvmStatic fun eachContainsIgnoreCase(list: List<String?>?, item: String?): Boolean {
+            return item != null && list.orEmpty().filterNotNull().any { str -> str.contains(item, ignoreCase = true) }
+        }
+
         /**
          * Checks if list is null or empty
         */
@@ -59,9 +63,32 @@ class ListsAcolyte {
             return list?.size == 1
         }
 
+        @JvmStatic fun <T> hasMoreThanOneItem(list: List<T?>?): Boolean {
+            return list != null && list.size > 1
+        }
+
+        @JvmStatic fun <T> emptyOrHasAtMostOneItem(list: List<T?>?): Boolean {
+            return list == null || list.size <= 1
+        }
+
         @JvmStatic fun <T> hasOnlyOneNonNullItem(list: List<T?>?): Boolean {
             // we use sequence cause it has lazy evaluation
-            return list?.asSequence()?.filter { it != null }?.take(2)?.count() == 1
+            return list != null && list.asSequence().filter { it != null }.count() == 1
+        }
+
+        @JvmStatic fun <T> hasMoreThanOneNonNullItem(list: List<T?>?): Boolean {
+            // we use sequence cause it has lazy evaluation
+            return list != null && list.asSequence().filter { it != null }.count() > 1
+        }
+
+        @JvmStatic fun <T> hasAtLeastOneNonNullItem(list: List<T?>?): Boolean {
+            // we use sequence cause it has lazy evaluation
+            return list != null && list.asSequence().filter { it != null }.count() > 0
+        }
+
+        @JvmStatic fun <T> emptyOrHasAtMostOneNonNullItem(list: List<T?>?): Boolean {
+            // we use sequence cause it has lazy evaluation
+            return list == null || list.asSequence().filter { it != null }.count() <= 1
         }
 
         @JvmStatic fun <T> getFirstItemIfExists(list: List<T?>?): Optional<T> {
