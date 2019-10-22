@@ -19,7 +19,6 @@ class MapsAcolyte {
             return kotlin.collections.hashMapOf(*pairs.map { Pair(it.key, it.value) }.toTypedArray())
         }
 
-
         /**
          * Checks if map is null or empty
         */
@@ -47,6 +46,19 @@ class MapsAcolyte {
 
         @JvmStatic fun <K, V> defaultIfEmpty(map: Map<K, V>?, defaultVal: Map<K, V>): Map<K, V> {
             return if (map == null || map.isEmpty()) defaultVal else map
+        }
+
+
+        @JvmStatic fun <K, V> hasOnlyOneItem(map: Map<K?, V?>?): Boolean {
+            return map?.size == 1
+        }
+
+        @JvmStatic fun <K, V> hasMoreThanOneItem(map: Map<K?, V?>?): Boolean {
+            return map != null && map.size > 1
+        }
+
+        @JvmStatic fun <K, V> emptyOrHasAtMostOneItem(map: Map<K?, V?>?): Boolean {
+            return map == null || map.size <= 1
         }
     }
 }

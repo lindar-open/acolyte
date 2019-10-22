@@ -20,6 +20,10 @@ class SetsAcolyte {
             return set.orEmpty().filter { str -> str.equals(item, ignoreCase = true) }.any()
         }
 
+        @JvmStatic fun eachContainsIgnoreCase(set: Set<String?>?, item: String?): Boolean {
+            return item != null && set.orEmpty().filterNotNull().any { str -> str.contains(item, ignoreCase = true) }
+        }
+
         /**
          * Checks if set is null or empty
         */
@@ -53,14 +57,27 @@ class SetsAcolyte {
             return set?.size == 1
         }
 
+        @JvmStatic fun <T> hasMoreThanOneItem(set: Set<T?>?): Boolean {
+            return set != null && set.size > 1
+        }
+
+        @JvmStatic fun <T> emptyOrHasAtMostOneItem(set: Set<T?>?): Boolean {
+            return set == null || set.size <= 1
+        }
+
         @JvmStatic fun <T> hasOnlyOneNonNullItem(set: Set<T?>?): Boolean {
             // we use sequence cause it has lazy evaluation
-            return set?.asSequence()?.filter { it != null }?.take(2)?.count() == 1
+            return set != null && set.asSequence().filter { it != null }.count() == 1
+        }
+
+        @JvmStatic fun <T> hasMoreThanOneNonNullItem(set: Set<T?>?): Boolean {
+            // we use sequence cause it has lazy evaluation
+            return set != null && set.asSequence().filter { it != null }.count() > 1
+        }
+
+        @JvmStatic fun <T> hasAtLeastOneNonNullItem(set: Set<T?>?): Boolean {
+            // we use sequence cause it has lazy evaluation
+            return set != null && set.asSequence().filter { it != null }.count() > 0
         }
     }
-}
-
-fun main(args: Array<String>) {
-    println(ListsAcolyte.listOf("", "dfsa", "dasfas"))
-//    println(SetsAcolyte.setOf("", "dfsa", "dasfas"))
 }
