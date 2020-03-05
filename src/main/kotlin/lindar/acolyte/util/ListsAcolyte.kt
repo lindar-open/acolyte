@@ -106,5 +106,13 @@ class ListsAcolyte {
         @JvmStatic fun <T> getLastNonNullItemIfExists(list: List<T?>?): Optional<T> {
             return Optional.ofNullable(list?.findLast { it != null })
         }
+
+        @JvmStatic fun <T, U> mapTo(initialList: List<T?>?, mapper: (T?) -> U): List<U> {
+            return initialList?.filterNotNull()?.map(mapper) ?: ArrayList()
+        }
+
+        @JvmStatic fun <T, U> mapToIncludeNull(initialList: List<T?>?, mapper: (T?) -> U?): List<U?> {
+            return initialList?.map(mapper) ?: ArrayList()
+        }
     }
 }
