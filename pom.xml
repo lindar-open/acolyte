@@ -4,7 +4,7 @@
 
     <groupId>com.lindar</groupId>
     <artifactId>acolyte</artifactId>
-    <version>1.4.4-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
 
     <name>Acolyte</name>
     <description>Acolyte is a utility library, used by entire Lindar ecosystem, that helps developers reach their goals and dreams a wee bit faster. Try it yourself today!</description>
@@ -35,10 +35,6 @@
     </scm>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>lindar-nexus</id>
-            <url>http://nexus-lindar.mircloud.host/content/repositories/lindar-maven-repo/</url>
-        </snapshotRepository>
         <repository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
@@ -48,7 +44,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <kotlin.version>1.3.50</kotlin.version>
+        <kotlin.version>1.3.72</kotlin.version>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
     </properties>
 
@@ -67,18 +63,18 @@
         <dependency>
             <groupId>io.github.microutils</groupId>
             <artifactId>kotlin-logging</artifactId>
-            <version>1.7.6</version>
+            <version>1.7.8</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.10</version>
+            <version>1.18.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -112,7 +108,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.2.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -138,7 +134,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>empty-javadoc-jar</id>
@@ -162,6 +158,11 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <releaseProfiles>releases</releaseProfiles>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.0.0-M1</version>
             </plugin>
         </plugins>
     </build>
@@ -208,20 +209,4 @@
             </build>
         </profile>
     </profiles>
-
-    <repositories>
-        <repository>
-            <id>kotlin-milestones</id>
-            <name>Kotlin Milestones</name>
-            <url>http://dl.bintray.com/kotlin/kotlin-eap-1.2</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>kotlin-milestones</id>
-            <name>Kotlin Milestones</name>
-            <url>http://dl.bintray.com/kotlin/kotlin-eap-1.2</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>

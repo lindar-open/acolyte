@@ -26,6 +26,14 @@ class ListsAcolyte {
             return items.all{str -> list.orEmpty().any{it.equals(str, ignoreCase = true)}}
         }
 
+        @JvmStatic fun containsAnyIgnoreCase(list: List<String?>?, items: List<String?>?): Boolean {
+            return items != null && list.orEmpty().any { str -> items.any { it.equals(str, ignoreCase = true) } }
+        }
+
+        @JvmStatic fun containsAllIgnoreCase(list: List<String?>?, items: List<String?>?): Boolean {
+            return items != null && items.all{str -> list.orEmpty().any{it.equals(str, ignoreCase = true)}}
+        }
+
         @JvmStatic fun eachContainsIgnoreCase(list: List<String?>?, item: String?): Boolean {
             return item != null && list.orEmpty().filterNotNull().any { str -> str.contains(item, ignoreCase = true) }
         }
@@ -105,6 +113,14 @@ class ListsAcolyte {
 
         @JvmStatic fun <T> getLastNonNullItemIfExists(list: List<T?>?): Optional<T> {
             return Optional.ofNullable(list?.findLast { it != null })
+        }
+
+        @JvmStatic fun <T, U> mapTo(initialList: List<T?>?, mapper: (T?) -> U): List<U> {
+            return initialList?.filter {it != null}?.map(mapper) ?: ArrayList()
+        }
+
+        @JvmStatic fun <T, U> mapToIncludeNull(initialList: List<T?>?, mapper: (T?) -> U?): List<U?> {
+            return initialList?.map(mapper) ?: ArrayList()
         }
     }
 }
