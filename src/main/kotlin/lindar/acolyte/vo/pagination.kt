@@ -1,6 +1,13 @@
 package lindar.acolyte.vo
 
+import java.util.function.Function
+
 data class PaginatedCollection<out T>(val contents: List<T>, val pagination: PaginationVO, val sort: SortVO)
+data class CursorPaginatedCollection<T>(val contents: List<T>, val pagination: CursorPaginationVO, val sort: SortVO) {
+    fun <U> map(converter: Function<T, U>): CursorPaginatedCollection<U> {
+        return CursorPaginatedCollection(contents.map(converter::apply), pagination, sort)
+    }
+}
 
 data class PaginationVO(val page: Int, val size: Int, val totalPages: Int, var totalElements: Long) {
     companion object Builder {
@@ -31,6 +38,28 @@ data class PaginationVO(val page: Int, val size: Int, val totalPages: Int, var t
 
 
         fun build() = PaginationVO(builderPage, builderSize, builderTotalPages, builderTotalElements)
+    }
+}
+
+data class CursorPaginationVO(val cursor: String?, val size: Int) {
+    val hasNext: Boolean
+        get() = this.cursor != null
+
+    companion object Builder {
+        private var builderCursor: String? = null
+        private var builderSize = 20
+
+        fun cursor(cursor: String?): CursorPaginationVO.Builder {
+            this.builderCursor = cursor
+            return this
+        }
+
+        fun size(size: Int): CursorPaginationVO.Builder {
+            this.builderSize = size
+            return this
+        }
+
+        fun build() = CursorPaginationVO(builderCursor, builderSize)
     }
 }
 
