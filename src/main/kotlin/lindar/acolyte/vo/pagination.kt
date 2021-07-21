@@ -7,6 +7,10 @@ data class CursorPaginatedCollection<T>(val contents: List<T>, val pagination: C
     fun <U> map(converter: Function<T, U>): CursorPaginatedCollection<U> {
         return CursorPaginatedCollection(contents.map(converter::apply), pagination, sort)
     }
+
+    fun filter(predicate: Function<T, Boolean>): CursorPaginatedCollection<T> {
+        return CursorPaginatedCollection(contents.filter(predicate::apply), pagination, sort)
+    }
 }
 
 data class PaginationVO(val page: Int, val size: Int, val totalPages: Int, var totalElements: Long) {
