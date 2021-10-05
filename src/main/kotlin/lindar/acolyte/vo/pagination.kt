@@ -96,7 +96,7 @@ data class PageableVO(val page: Int, val size: Int, val sort: List<SortVO>? = nu
 data class SortVO(val field: String, val dir: SortDirection = SortDirection.ASC) {
 
     companion object Builder {
-        private lateinit var builderField: String
+        private var builderField = ""
         private var builderDir = SortDirection.ASC
 
         fun field(field: String): SortVO.Builder {
