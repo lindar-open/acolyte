@@ -73,12 +73,14 @@ internal class DateAcolyteTest {
         @JvmStatic
         private fun startOfDayArguments(): Stream<Arguments> {
             val date = ZonedDateTime.of(LocalDate.of(2022, 11, 8), LocalTime.of(9, 55), ZoneOffset.UTC)
+            val dateDuringDST = ZonedDateTime.of(LocalDate.of(2022, 10, 30), LocalTime.of(3, 0), ZoneId.of("Europe/London"))
             return Stream.of(
                 Arguments.of("2022-11-08T00:00:00Z", 0, date, ZoneOffset.UTC),
                 Arguments.of("2022-11-08T05:00:00Z", 5, date, ZoneOffset.UTC),
                 Arguments.of("2022-11-08T09:00:00Z", 9, date, ZoneOffset.UTC),
                 Arguments.of("2022-11-07T10:00:00Z", 10, date, ZoneOffset.UTC),
                 Arguments.of("2022-11-07T22:00:00Z", 22, date, ZoneOffset.UTC),
+                Arguments.of("2022-10-29T22:00:00Z", 22, dateDuringDST, ZoneId.of("Europe/London")),
             )
         }
 
