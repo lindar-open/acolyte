@@ -1,16 +1,9 @@
 package lindar.acolyte.util.dates
 
-import java.time.DayOfWeek
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import java.time.*
 import java.time.format.DateTimeFormatter
-import java.time.temporal.TemporalAdjusters
-import java.util.Date
-import java.util.Locale
+import java.time.temporal.*
+import java.util.*
 
 class DateAcolyte(private var timezone: ZoneId) {
     companion object {
@@ -24,6 +17,21 @@ class DateAcolyte(private var timezone: ZoneId) {
 
         @JvmStatic fun withTimezone(zoneId: ZoneId): DateAcolyte {
             return DateAcolyte(zoneId)
+        }
+
+        @JvmStatic fun withUTC(): DateAcolyte {
+            return DateAcolyte(ZoneOffset.UTC)
+        }
+
+        @JvmStatic fun previousOrSameHour(hourOfDay: Int): TemporalAdjuster {
+            return TemporalAdjuster { temporal: Temporal ->
+                val calHod = temporal[ChronoField.HOUR_OF_DAY]
+                if (calHod == hourOfDay) {
+                    return@TemporalAdjuster temporal
+                }
+                val hoursDiff = hourOfDay - calHod
+                temporal.minus((if (hoursDiff >= 0) 24 - hoursDiff else -hoursDiff).toLong(), ChronoUnit.HOURS)
+            }
         }
     }
     private var formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
@@ -97,4 +105,61 @@ class DateAcolyte(private var timezone: ZoneId) {
         return ZonedDateTime.now(timezone).with(TemporalAdjusters.lastDayOfYear()).withHour(23).withMinute(59).withSecond(59)
     }
 
+    fun startOfDay(hourOfDay: Int): ZonedDateTime {
+        return ZonedDateTime.now(timezone)
+            .with(previousOrSameHour(hourOfDay))
+            .withMinute(0)
+            .withSecond(0)
+            .withNano(0)
+    }
+
+    fun endOfDay(hourOfDay: Int): ZonedDateTime {
+        return ZonedDateTime.now(timezone)
+            .plusDays(1)
+            .with(previousOrSameHour(hourOfDay))
+            .withMinute(0)
+            .withSecond(0)
+            .withNano(0)
+            .minusNanos(1)
+    }
+
+    fun startOfMonth(hourOfDay: Int): ZonedDateTime {
+        return ZonedDateTime.now(timezone)
+            .with(previousOrSameHour(hourOfDay))
+            .with(TemporalAdjusters.firstDayOfMonth())
+            .withMinute(0)
+            .withSecond(0)
+            .withNano(0)
+    }
+
+    fun endOfMonth(hourOfDay: Int): ZonedDateTime {
+        return ZonedDateTime.now(timezone)
+            .plusMonths(1)
+            .with(previousOrSameHour(hourOfDay))
+            .with(TemporalAdjusters.firstDayOfMonth())
+            .withMinute(0)
+            .withSecond(0)
+            .withNano(0)
+            .minusNanos(1)
+    }
+
+    fun startOfWeek(hourOfDay: Int): ZonedDateTime {
+        return ZonedDateTime.now(timezone)
+            .with(previousOrSameHour(hourOfDay))
+            .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+            .withMinute(0)
+            .withSecond(0)
+            .withNano(0)
+    }
+
+    fun endOfWeek(hourOfDay: Int): ZonedDateTime {
+        return ZonedDateTime.now(timezone)
+            .plusWeeks(1)
+            .with(previousOrSameHour(hourOfDay))
+            .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+            .withMinute(0)
+            .withSecond(0)
+            .withNano(0)
+            .minusNanos(1)
+    }
 }
