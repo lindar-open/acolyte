@@ -1,7 +1,6 @@
 package lindar.acolyte.util.dates
 
-import lindar.acolyte.util.dates.DateAcolyte.Companion.withTimezone
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.mockStatic
@@ -11,7 +10,6 @@ internal class DateAcolyteTest {
 
     @Test
     fun startOfDay() {
-        withTimezone(ZoneOffset.UTC).startOfDay()
         val date = ZonedDateTime.of(LocalDate.of(2022, 11, 8), LocalTime.of(9, 55), ZoneOffset.UTC)
         mock(date.toInstant()) {
             assertEquals(ZonedDateTime.parse("2022-11-08T00:00:00Z"), DateAcolyte.withUTC().startOfDay(0))
