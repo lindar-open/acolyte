@@ -106,7 +106,7 @@ class DateAcolyte(private var timezone: ZoneId) {
     }
 
     fun startOfDay(hourOfDay: Int): ZonedDateTime {
-        return ZonedDateTime.now()
+        return ZonedDateTime.now(timezone)
             .with(previousOrSameHour(hourOfDay))
             .withMinute(0)
             .withSecond(0)
@@ -114,7 +114,7 @@ class DateAcolyte(private var timezone: ZoneId) {
     }
 
     fun endOfDay(hourOfDay: Int): ZonedDateTime {
-        return ZonedDateTime.now()
+        return ZonedDateTime.now(timezone)
             .plusDays(1)
             .with(previousOrSameHour(hourOfDay))
             .withMinute(0)
@@ -124,7 +124,7 @@ class DateAcolyte(private var timezone: ZoneId) {
     }
 
     fun startOfMonth(hourOfDay: Int): ZonedDateTime {
-        return ZonedDateTime.now()
+        return ZonedDateTime.now(timezone)
             .with(previousOrSameHour(hourOfDay))
             .with(TemporalAdjusters.firstDayOfMonth())
             .withMinute(0)
@@ -133,7 +133,7 @@ class DateAcolyte(private var timezone: ZoneId) {
     }
 
     fun endOfMonth(hourOfDay: Int): ZonedDateTime {
-        return ZonedDateTime.now()
+        return ZonedDateTime.now(timezone)
             .plusMonths(1)
             .with(previousOrSameHour(hourOfDay))
             .with(TemporalAdjusters.firstDayOfMonth())
@@ -144,7 +144,7 @@ class DateAcolyte(private var timezone: ZoneId) {
     }
 
     fun startOfWeek(hourOfDay: Int): ZonedDateTime {
-        return ZonedDateTime.now()
+        return ZonedDateTime.now(timezone)
             .with(previousOrSameHour(hourOfDay))
             .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
             .withMinute(0)
@@ -153,7 +153,7 @@ class DateAcolyte(private var timezone: ZoneId) {
     }
 
     fun endOfWeek(hourOfDay: Int): ZonedDateTime {
-        return ZonedDateTime.now()
+        return ZonedDateTime.now(timezone)
             .plusWeeks(1)
             .with(previousOrSameHour(hourOfDay))
             .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
