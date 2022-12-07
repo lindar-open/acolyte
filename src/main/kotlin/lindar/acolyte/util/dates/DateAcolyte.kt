@@ -1,9 +1,11 @@
 package lindar.acolyte.util.dates
 
+import lindar.acolyte.vo.ApproximateDuration
 import java.time.*
 import java.time.format.DateTimeFormatter
 import java.time.temporal.*
 import java.util.*
+import kotlin.math.floor
 
 class DateAcolyte(private var timezone: ZoneId) {
     companion object {
@@ -161,5 +163,45 @@ class DateAcolyte(private var timezone: ZoneId) {
             .withSecond(0)
             .withNano(0)
             .minusNanos(1)
+    }
+
+    /**
+     * Gets the approximate duration rounded up to the bigger time unit(year, months...seconds).
+     * Example 1: the duration between 2022-12-07 00:00:00.00 and 2024-07-07 00:00:00.00
+     * is 1 year and 7 months but the method will return 1 year.
+     * Example 2:the duration between 2022-12-07 00:00:00.00 and 2023-11-15 00:00:00.00
+     * is 11 month and 8 days but the method will return 11 months.
+     * Example 3:the duration between 2022-12-07 00:00:00.00 and 2023-01-01 23:00:00.00
+     * is 25 days and 23 hours but the method will return 25 days.
+     */
+    fun getApproximateDurationBetween(date1: Instant, date2: Instant): ApproximateDuration {
+        if (date1 > date2) {
+            return ApproximateDuration(0, ChronoUnit.MINUTES)
+        }
+
+        val zonedDateTime1 = date1.atZone(timezone)
+        val zonedDateTime2 = date2.atZone(timezone)
+        val duration = Duration.between(zonedDateTime1, zonedDateTime2)
+        val millis = duration.toMillis()
+        val seconds = duration.seconds
+        val minutes = duration.toMinutes()
+        val hours = duration.toHours()
+
+        val localDate1 = date1.atZone(timezone).toLocalDate()
+        val localDate2 = date2.atZone(timezone).toLocalDate()
+
+        val period = Period.between(localDate1, localDate2).normalized()
+        val days = period.days
+        val months = period.months
+        val years = period.years
+
+        return when {
+            years > 0 -> ApproximateDuration(years, ChronoUnit.YEARS)
+            months > 0 -> ApproximateDuration(months, ChronoUnit.MONTHS)
+            days > 0 -> ApproximateDuration(days, ChronoUnit.DAYS)
+            hours > 0 -> ApproximateDuration(floor((minutes / 60f).toDouble()).toInt(), ChronoUnit.HOURS)
+            minutes > 0 -> ApproximateDuration(floor((seconds / 60f).toDouble()).toInt(), ChronoUnit.MINUTES)
+            else -> ApproximateDuration(floor((millis / 1000f).toDouble()).toInt(), ChronoUnit.SECONDS)
+        }
     }
 }
