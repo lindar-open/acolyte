@@ -182,7 +182,6 @@ class DateAcolyte(private var timezone: ZoneId) {
         val zonedDateTime1 = date1.atZone(timezone)
         val zonedDateTime2 = date2.atZone(timezone)
         val duration = Duration.between(zonedDateTime1, zonedDateTime2)
-        val millis = duration.toMillis()
         val seconds = duration.seconds
         val minutes = duration.toMinutes()
         val hours = duration.toHours()
@@ -199,9 +198,9 @@ class DateAcolyte(private var timezone: ZoneId) {
             years > 0 -> ApproximateDuration(years, ChronoUnit.YEARS)
             months > 0 -> ApproximateDuration(months, ChronoUnit.MONTHS)
             days > 0 -> ApproximateDuration(days, ChronoUnit.DAYS)
-            hours > 0 -> ApproximateDuration(floor((minutes / 60f).toDouble()).toInt(), ChronoUnit.HOURS)
-            minutes > 0 -> ApproximateDuration(floor((seconds / 60f).toDouble()).toInt(), ChronoUnit.MINUTES)
-            else -> ApproximateDuration(floor((millis / 1000f).toDouble()).toInt(), ChronoUnit.SECONDS)
+            hours > 0 -> ApproximateDuration(hours.toInt(), ChronoUnit.HOURS)
+            minutes > 0 -> ApproximateDuration(minutes.toInt(), ChronoUnit.MINUTES)
+            else -> ApproximateDuration(seconds.toInt(), ChronoUnit.SECONDS)
         }
     }
 }
