@@ -8,7 +8,7 @@ data class ApproximateDuration(val duration: Int, val unit: ChronoUnit) {
         return when (unit) {
             ChronoUnit.YEARS -> format(singlePlural(duration, "year", "years"))
             ChronoUnit.MONTHS -> format(singlePlural(duration, "month", "months"))
-            ChronoUnit.DAYS -> format(singlePlural(duration, "days", "days"))
+            ChronoUnit.DAYS -> format(singlePlural(duration, "day", "days"))
             ChronoUnit.HOURS -> format(singlePlural(duration, "hour", "hours"))
             ChronoUnit.MINUTES -> format(singlePlural(duration, "minute", "minutes"))
             else -> format(singlePlural(duration, "second", "seconds"))

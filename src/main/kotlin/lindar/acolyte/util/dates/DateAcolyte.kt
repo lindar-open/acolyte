@@ -187,8 +187,8 @@ class DateAcolyte(private var timezone: ZoneId) {
         val minutes = duration.toMinutes()
         val hours = duration.toHours()
 
-        val localDate1 = date1.atZone(timezone).toLocalDate()
-        val localDate2 = date2.atZone(timezone).toLocalDate()
+        val localDate1 = zonedDateTime1.toLocalDate()
+        val localDate2 = zonedDateTime2.toLocalDate()
 
         val period = Period.between(localDate1, localDate2).normalized()
         val days = period.days
