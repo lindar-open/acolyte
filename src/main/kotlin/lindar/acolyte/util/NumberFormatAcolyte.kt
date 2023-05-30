@@ -60,16 +60,20 @@ class NumberFormatAcolyte {
         return this
     }
 
-    @Deprecated("This function is deprecated. Use showFractionUnitBelowOne() instead.")
+    @Deprecated(
+        "This function is deprecated. Use showFractionUnitBelowOne() instead.",
+        ReplaceWith("showFractionUnitBelowOne()")
+    )
     fun showPenniesBelowOne(): NumberFormatAcolyte {
-        showFractionUnitBelowOne = true
-        return this
+        return showFractionUnitBelowOne()
     }
 
-    @Deprecated("This function is deprecated. Use hideFractionUnitBelowOne() instead.")
+    @Deprecated(
+        "This function is deprecated. Use hideFractionUnitBelowOne() instead.",
+        ReplaceWith("hideFractionUnitBelowOne()")
+    )
     fun hidePenniesBelowOne(): NumberFormatAcolyte {
-        showFractionUnitBelowOne = false
-        return this
+        return hideFractionUnitBelowOne()
     }
 
     fun showFractionUnitBelowOne(): NumberFormatAcolyte {
