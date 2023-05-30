@@ -8,9 +8,7 @@ import java.math.RoundingMode;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class NumberFormatAcolyteTest {
 
@@ -152,12 +150,28 @@ public class NumberFormatAcolyteTest {
         Number test2 = new BigDecimal("1.95");
         Number test3 = new Integer(1);
 
-        String result1 = NumberFormatAcolyte.builder().showPenniesBelowOne().format(test1);
-        String result4 = NumberFormatAcolyte.builder().showPenniesBelowOne().hidePenniesBelowOne().format(test1);
-        String result2 = NumberFormatAcolyte.builder().showPenniesBelowOne().format(test2);
-        String result3 = NumberFormatAcolyte.builder().showPenniesBelowOne().format(test3);
+        String result1 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().fractionUnit("p").format(test1);
+        String result4 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().fractionUnit("p").hideFractionUnitBelowOne().format(test1);
+        String result2 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().fractionUnit("p").format(test2);
+        String result3 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().fractionUnit("p").format(test3);
 
         assertEquals("95p", result1);
+        assertEquals("1.95", result2);
+        assertEquals("1", result3);
+        assertEquals("0.95", result4);
+    }
+
+    @Test
+    public void testCentsMethod(){
+        Number test1 = new BigDecimal("0.95");
+        Number test2 = new BigDecimal("1.95");
+        Number test3 = new Integer(1);
+        String result1 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().fractionUnit("c").format(test1);
+        String result4 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().fractionUnit("c").hideFractionUnitBelowOne().format(test1);
+        String result2 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().fractionUnit("c").format(test2);
+        String result3 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().fractionUnit("c").format(test3);
+
+        assertEquals("95c", result1);
         assertEquals("1.95", result2);
         assertEquals("1", result3);
         assertEquals("0.95", result4);
@@ -167,6 +181,7 @@ public class NumberFormatAcolyteTest {
     public void testDefaultMethods(){
         Number test1 = new BigDecimal("1.3");
         Number test2 = null;
+        Number test3 = new BigDecimal("0.95");
         String defaultString = "default";
 
         String result1 = NumberFormatAcolyte.builder().formatOrDefault(test1, defaultString);
@@ -175,11 +190,15 @@ public class NumberFormatAcolyteTest {
         String result3 = NumberFormatAcolyte.builder().formatToNull(test1);
         String result4 = NumberFormatAcolyte.builder().formatToNull(test2);
 
+        String result5 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().format(test3);
+        
         assertEquals("1.30", result1);
         assertEquals(defaultString, result2);
 
         assertEquals("1.30", result3);
         assertNull(result4);
+
+        assertEquals("95p", result5);
     }
 
 

@@ -7,8 +7,6 @@ import java.util.Locale
 
 class NumberFormatAcolyte {
     companion object {
-        private const val PENNY_SIGN = "p"
-
         @JvmStatic fun builder(): NumberFormatAcolyte {
             return NumberFormatAcolyte()
         }
@@ -18,7 +16,8 @@ class NumberFormatAcolyte {
     private var showTrailingZero = false
     private var showThousandsSeparator = true
     private var showCurrency = false
-    private var showPenniesBelowOne = false
+    private var showFractionUnitBelowOne = false
+    private var fractionUnit = "p"
     private var minFractionDigits = 2
     private var maxFractionDigits = 2
     private var roundingMode = RoundingMode.HALF_UP
@@ -61,13 +60,30 @@ class NumberFormatAcolyte {
         return this
     }
 
+    @Deprecated("This function is deprecated. Use showFractionUnitBelowOne() instead.")
     fun showPenniesBelowOne(): NumberFormatAcolyte {
-        showPenniesBelowOne = true
+        showFractionUnitBelowOne = true
         return this
     }
 
+    @Deprecated("This function is deprecated. Use hideFractionUnitBelowOne() instead.")
     fun hidePenniesBelowOne(): NumberFormatAcolyte {
-        showPenniesBelowOne = false
+        showFractionUnitBelowOne = false
+        return this
+    }
+
+    fun showFractionUnitBelowOne(): NumberFormatAcolyte {
+        showFractionUnitBelowOne = true
+        return this
+    }
+
+    fun hideFractionUnitBelowOne(): NumberFormatAcolyte {
+        showFractionUnitBelowOne = false
+        return this
+    }
+
+    fun fractionUnit(currentFractionUnit: String): NumberFormatAcolyte {
+        fractionUnit = currentFractionUnit
         return this
     }
 
@@ -144,8 +160,8 @@ class NumberFormatAcolyte {
     fun format(number: Number?): String {
         val amountDoubleVal = number?.toDouble() ?: return 0.toString()
 
-        val shouldShowPennies = showPenniesBelowOne && NumbersAcolyte.lessThanOne(number)
-        val decimalFormat = if (showCurrency && !shouldShowPennies) {
+        val shouldShowFractionUnit = showFractionUnitBelowOne && NumbersAcolyte.lessThanOne(number)
+        val decimalFormat = if (showCurrency && !shouldShowFractionUnit) {
             NumberFormat.getCurrencyInstance(locale) as DecimalFormat
         } else {
             NumberFormat.getNumberInstance(locale) as DecimalFormat
@@ -160,8 +176,8 @@ class NumberFormatAcolyte {
         decimalFormat.minimumFractionDigits = minFractionDigits
         decimalFormat.roundingMode = roundingMode
 
-        if (shouldShowPennies) {
-            return prefix + remove0Decimals(decimalFormat.format(amountDoubleVal * 100)) + PENNY_SIGN + suffix
+        if (shouldShowFractionUnit) {
+            return prefix + remove0Decimals(decimalFormat.format(amountDoubleVal * 100)) + fractionUnit + suffix
         }
 
         val formattedNumber = decimalFormat.format(number)
