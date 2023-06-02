@@ -150,10 +150,10 @@ public class NumberFormatAcolyteTest {
         Number test2 = new BigDecimal("1.95");
         Number test3 = new Integer(1);
 
-        String result1 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().fractionUnit("p").format(test1);
-        String result4 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().fractionUnit("p").hideFractionUnitBelowOne().format(test1);
-        String result2 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().fractionUnit("p").format(test2);
-        String result3 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().fractionUnit("p").format(test3);
+        String result1 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().locale(Locale.UK).format(test1);
+        String result4 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().locale(Locale.UK).hideFractionUnitBelowOne().format(test1);
+        String result2 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().locale(Locale.UK).format(test2);
+        String result3 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().locale(Locale.UK).format(test3);
 
         assertEquals("95p", result1);
         assertEquals("1.95", result2);
@@ -162,16 +162,34 @@ public class NumberFormatAcolyteTest {
     }
 
     @Test
-    public void testCentsMethod(){
+    public void testEuroCentsMethod(){
         Number test1 = new BigDecimal("0.95");
         Number test2 = new BigDecimal("1.95");
         Number test3 = new Integer(1);
-        String result1 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().fractionUnit("c").format(test1);
-        String result4 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().fractionUnit("c").hideFractionUnitBelowOne().format(test1);
-        String result2 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().fractionUnit("c").format(test2);
-        String result3 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().fractionUnit("c").format(test3);
+        Locale irishLocale = new Locale("en", "IE");
+        String result1 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().locale(irishLocale).format(test1);
+        String result4 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().locale(irishLocale).hideFractionUnitBelowOne().format(test1);
+        String result2 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().locale(irishLocale).format(test2);
+        String result3 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().locale(irishLocale).format(test3);
 
         assertEquals("95c", result1);
+        assertEquals("1.95", result2);
+        assertEquals("1", result3);
+        assertEquals("0.95", result4);
+    }
+
+    @Test
+    public void testDollarCentsMethod(){
+        Number test1 = new BigDecimal("0.95");
+        Number test2 = new BigDecimal("1.95");
+        Number test3 = new Integer(1);
+        ;
+        String result1 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().locale(Locale.CANADA).format(test1);
+        String result4 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().locale(Locale.CANADA).hideFractionUnitBelowOne().format(test1);
+        String result2 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().locale(Locale.CANADA).format(test2);
+        String result3 = NumberFormatAcolyte.builder().showFractionUnitBelowOne().locale(Locale.CANADA).format(test3);
+
+        assertEquals("95¢", result1);
         assertEquals("1.95", result2);
         assertEquals("1", result3);
         assertEquals("0.95", result4);

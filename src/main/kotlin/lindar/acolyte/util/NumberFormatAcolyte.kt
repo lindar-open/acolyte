@@ -3,21 +3,29 @@ package lindar.acolyte.util
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.NumberFormat
-import java.util.Locale
+import java.util.*
 
 class NumberFormatAcolyte {
     companion object {
+        private const val DEFAULT_FRACTION_UNIT = "p"
+
+        private val CURRENCY_TO_FRACTION_UNIT = mapOf<Currency, String>(
+            Currency.getInstance("GBP") to "p",
+            Currency.getInstance("EUR") to "c",
+            Currency.getInstance("CAD") to "¢"
+        )
+
         @JvmStatic fun builder(): NumberFormatAcolyte {
             return NumberFormatAcolyte()
         }
     }
 
     private var locale = Locale.UK
+    private var fractionUnit = DEFAULT_FRACTION_UNIT
     private var showTrailingZero = false
     private var showThousandsSeparator = true
     private var showCurrency = false
     private var showFractionUnitBelowOne = false
-    private var fractionUnit = "p"
     private var minFractionDigits = 2
     private var maxFractionDigits = 2
     private var roundingMode = RoundingMode.HALF_UP
@@ -27,6 +35,7 @@ class NumberFormatAcolyte {
 
     fun locale(currentLocale: Locale): NumberFormatAcolyte {
         locale = currentLocale
+        fractionUnit = CURRENCY_TO_FRACTION_UNIT.getOrDefault(Currency.getInstance(locale), DEFAULT_FRACTION_UNIT)
         return this
     }
 
@@ -83,11 +92,6 @@ class NumberFormatAcolyte {
 
     fun hideFractionUnitBelowOne(): NumberFormatAcolyte {
         showFractionUnitBelowOne = false
-        return this
-    }
-
-    fun fractionUnit(currentFractionUnit: String): NumberFormatAcolyte {
-        fractionUnit = currentFractionUnit
         return this
     }
 
@@ -161,6 +165,8 @@ class NumberFormatAcolyte {
         return if (number != null) format(number) else defaultValue
     }
 
+    fun getFractionUnit(): String = fractionUnit
+
     fun format(number: Number?): String {
         val amountDoubleVal = number?.toDouble() ?: return 0.toString()
 
@@ -197,4 +203,5 @@ class NumberFormatAcolyte {
         }
         return number.orEmpty()
     }
+
 }
