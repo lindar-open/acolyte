@@ -7,6 +7,7 @@ import java.util.*
 
 class NumberFormatAcolyte {
     companion object {
+        private val DEFAULT_LOCALE = Locale.UK
         private const val DEFAULT_FRACTION_UNIT = "p"
 
         private val CURRENCY_TO_FRACTION_UNIT = mapOf<Currency, String>(
@@ -15,12 +16,13 @@ class NumberFormatAcolyte {
             Currency.getInstance("CAD") to "¢"
         )
 
-        @JvmStatic fun builder(): NumberFormatAcolyte {
+        @JvmStatic
+        fun builder(): NumberFormatAcolyte {
             return NumberFormatAcolyte()
         }
     }
 
-    private var locale = Locale.UK
+    private var locale = DEFAULT_LOCALE
     private var fractionUnit = DEFAULT_FRACTION_UNIT
     private var showTrailingZero = false
     private var showThousandsSeparator = true
