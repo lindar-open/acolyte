@@ -1,24 +1,36 @@
 package lindar.acolyte.util
 
+import mu.KotlinLogging
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.NumberFormat
-import java.util.Locale
+import java.util.*
 
 class NumberFormatAcolyte {
     companion object {
-        private const val PENNY_SIGN = "p"
+        private val DEFAULT_LOCALE = Locale.UK
+        private const val DEFAULT_FRACTION_UNIT = "p"
 
-        @JvmStatic fun builder(): NumberFormatAcolyte {
+        private val CURRENCY_TO_FRACTION_UNIT = mapOf<Currency, String>(
+            Currency.getInstance("GBP") to "p",
+            Currency.getInstance("EUR") to "c",
+            Currency.getInstance("CAD") to "¢"
+        )
+
+        @JvmStatic
+        fun builder(): NumberFormatAcolyte {
             return NumberFormatAcolyte()
         }
+
+        private val logger = KotlinLogging.logger {}
     }
 
-    private var locale = Locale.UK
+    private var locale = DEFAULT_LOCALE
+    private var fractionUnit = DEFAULT_FRACTION_UNIT
     private var showTrailingZero = false
     private var showThousandsSeparator = true
     private var showCurrency = false
-    private var showPenniesBelowOne = false
+    private var showFractionUnitBelowOne = false
     private var minFractionDigits = 2
     private var maxFractionDigits = 2
     private var roundingMode = RoundingMode.HALF_UP
@@ -28,6 +40,16 @@ class NumberFormatAcolyte {
 
     fun locale(currentLocale: Locale): NumberFormatAcolyte {
         locale = currentLocale
+
+        try {
+            val currency = Currency.getInstance(locale)
+            fractionUnit = CURRENCY_TO_FRACTION_UNIT.getOrDefault(currency, DEFAULT_FRACTION_UNIT)
+        } catch (ex: IllegalArgumentException) {
+            logger.error { ex }
+        } catch (ex: NullPointerException) {
+            logger.error { ex }
+        }
+
         return this
     }
 
@@ -61,13 +83,29 @@ class NumberFormatAcolyte {
         return this
     }
 
+    @Deprecated(
+        "This function is deprecated. Use showFractionUnitBelowOne() instead.",
+        ReplaceWith("showFractionUnitBelowOne()")
+    )
     fun showPenniesBelowOne(): NumberFormatAcolyte {
-        showPenniesBelowOne = true
+        return showFractionUnitBelowOne()
+    }
+
+    @Deprecated(
+        "This function is deprecated. Use hideFractionUnitBelowOne() instead.",
+        ReplaceWith("hideFractionUnitBelowOne()")
+    )
+    fun hidePenniesBelowOne(): NumberFormatAcolyte {
+        return hideFractionUnitBelowOne()
+    }
+
+    fun showFractionUnitBelowOne(): NumberFormatAcolyte {
+        showFractionUnitBelowOne = true
         return this
     }
 
-    fun hidePenniesBelowOne(): NumberFormatAcolyte {
-        showPenniesBelowOne = false
+    fun hideFractionUnitBelowOne(): NumberFormatAcolyte {
+        showFractionUnitBelowOne = false
         return this
     }
 
@@ -141,11 +179,13 @@ class NumberFormatAcolyte {
         return if (number != null) format(number) else defaultValue
     }
 
+    fun getFractionUnit(): String = fractionUnit
+
     fun format(number: Number?): String {
         val amountDoubleVal = number?.toDouble() ?: return 0.toString()
 
-        val shouldShowPennies = showPenniesBelowOne && NumbersAcolyte.lessThanOne(number)
-        val decimalFormat = if (showCurrency && !shouldShowPennies) {
+        val shouldShowFractionUnit = showFractionUnitBelowOne && NumbersAcolyte.lessThanOne(number)
+        val decimalFormat = if (showCurrency && !shouldShowFractionUnit) {
             NumberFormat.getCurrencyInstance(locale) as DecimalFormat
         } else {
             NumberFormat.getNumberInstance(locale) as DecimalFormat
@@ -160,8 +200,8 @@ class NumberFormatAcolyte {
         decimalFormat.minimumFractionDigits = minFractionDigits
         decimalFormat.roundingMode = roundingMode
 
-        if (shouldShowPennies) {
-            return prefix + remove0Decimals(decimalFormat.format(amountDoubleVal * 100)) + PENNY_SIGN + suffix
+        if (shouldShowFractionUnit) {
+            return prefix + remove0Decimals(decimalFormat.format(amountDoubleVal * 100)) + fractionUnit + suffix
         }
 
         val formattedNumber = decimalFormat.format(number)
@@ -177,4 +217,5 @@ class NumberFormatAcolyte {
         }
         return number.orEmpty()
     }
+
 }
