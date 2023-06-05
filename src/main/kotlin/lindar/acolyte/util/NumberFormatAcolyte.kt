@@ -1,5 +1,6 @@
 package lindar.acolyte.util
 
+import mu.KotlinLogging
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.NumberFormat
@@ -20,6 +21,8 @@ class NumberFormatAcolyte {
         fun builder(): NumberFormatAcolyte {
             return NumberFormatAcolyte()
         }
+
+        private val logger = KotlinLogging.logger {}
     }
 
     private var locale = DEFAULT_LOCALE
@@ -37,7 +40,16 @@ class NumberFormatAcolyte {
 
     fun locale(currentLocale: Locale): NumberFormatAcolyte {
         locale = currentLocale
-        fractionUnit = CURRENCY_TO_FRACTION_UNIT.getOrDefault(Currency.getInstance(locale), DEFAULT_FRACTION_UNIT)
+
+        try {
+            val currency = Currency.getInstance(locale)
+            fractionUnit = CURRENCY_TO_FRACTION_UNIT.getOrDefault(currency, DEFAULT_FRACTION_UNIT)
+        } catch (ex: IllegalArgumentException) {
+            logger.error { ex }
+        } catch (ex: NullPointerException) {
+            logger.error { ex }
+        }
+
         return this
     }
 
