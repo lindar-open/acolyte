@@ -4,7 +4,7 @@
 
     <groupId>com.lindar</groupId>
     <artifactId>acolyte</artifactId>
-    <version>1.6.6</version>
+    <version>1.6.7-SNAPSHOT</version>
 
     <name>Acolyte</name>
     <description>Acolyte is a utility library, used by entire Lindar ecosystem, that helps developers reach their goals and dreams a wee bit faster. Try it yourself today!</description>
