@@ -70,7 +70,6 @@ class DateAcolyte(private var timezone: ZoneId) {
         return DateParserAcolyte(formatter)
     }
 
-
     fun toLocalDateTime(instant: Instant): LocalDateTime {
         return LocalDateTime.ofInstant(instant, timezone)
     }
