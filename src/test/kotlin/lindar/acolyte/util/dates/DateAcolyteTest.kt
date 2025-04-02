@@ -14,6 +14,22 @@ import java.util.stream.Stream
 internal class DateAcolyteTest {
 
     @ParameterizedTest
+    @MethodSource("startOfDayNoHourArguments")
+    fun startOfDay_noHour_expected(expected: ZonedDateTime, currentDate: Instant, zoneId: ZoneId) {
+        mock(currentDate, zoneId) {
+            assertEquals(expected, DateAcolyte.withTimezone(zoneId).startOfDay())
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("endOfDayNoHourArguments")
+    fun endOfDay_noHour_expected(expected: ZonedDateTime, currentDate: Instant, zoneId: ZoneId) {
+        mock(currentDate, zoneId) {
+            assertEquals(expected, DateAcolyte.withTimezone(zoneId).endOfDay())
+        }
+    }
+
+    @ParameterizedTest
     @MethodSource("startOfDayArguments")
     fun startOfDay(expected: String, hourOfDay: Int, currentDate: ZonedDateTime, zoneId: ZoneId) {
         mock(currentDate.toInstant()) {
@@ -68,14 +84,59 @@ internal class DateAcolyteTest {
             ZonedDateTime.parse(expected),
             ZonedDateTime.parse(currentDate)
                 .with(DateAcolyte.previousOrSameHour(hourOfDay))
-                    )
+        )
     }
 
     companion object {
         @JvmStatic
+        private fun startOfDayNoHourArguments(): Stream<Arguments> {
+            val instantDateDuringBST = Instant.parse("2025-03-31T23:00:00Z")
+            val instantDate = Instant.parse("2025-02-11T15:00:00Z")
+            return Stream.of(
+                Arguments.of(
+                    ZonedDateTime.of(LocalDate.of(2025, 4, 1), LocalTime.of(0, 0), ZoneId.of("Europe/London")),
+                    instantDateDuringBST,
+                    ZoneId.of("Europe/London")
+                ),
+                Arguments.of(
+                    ZonedDateTime.of(
+                        LocalDate.of(2025, 2, 11),
+                        LocalTime.of(0, 0),
+                        ZoneId.of("Europe/London")
+                    ), instantDate, ZoneId.of("Europe/London")
+                )
+            )
+        }
+
+        @JvmStatic
+        private fun endOfDayNoHourArguments(): Stream<Arguments> {
+            val dateDuringDST = Instant.parse("2025-10-25T23:59:59Z")
+            val instantDate = Instant.parse("2025-02-24T15:00:00Z")
+            return Stream.of(
+                Arguments.of(
+                    ZonedDateTime.of(
+                        LocalDate.of(2025, 10, 26),
+                        LocalTime.of(23, 59, 59),
+                        ZoneId.of("Europe/London")
+                    ),
+                    dateDuringDST, ZoneId.of("Europe/London"),
+                ),
+                Arguments.of(
+                    ZonedDateTime.of(
+                        LocalDate.of(2025, 2, 24),
+                        LocalTime.of(23, 59, 59),
+                        ZoneId.of("Europe/London")
+                    ),
+                    instantDate, ZoneId.of("Europe/London"),
+                )
+            )
+        }
+
+        @JvmStatic
         private fun startOfDayArguments(): Stream<Arguments> {
             val date = ZonedDateTime.of(LocalDate.of(2022, 11, 8), LocalTime.of(9, 55), ZoneOffset.UTC)
-            val dateDuringDST = ZonedDateTime.of(LocalDate.of(2022, 10, 30), LocalTime.of(3, 0), ZoneId.of("Europe/London"))
+            val dateDuringDST =
+                ZonedDateTime.of(LocalDate.of(2022, 10, 30), LocalTime.of(3, 0), ZoneId.of("Europe/London"))
             return Stream.of(
                 Arguments.of("2022-11-08T00:00:00Z", 0, date, ZoneOffset.UTC),
                 Arguments.of("2022-11-08T05:00:00Z", 5, date, ZoneOffset.UTC),
@@ -83,7 +144,7 @@ internal class DateAcolyteTest {
                 Arguments.of("2022-11-07T10:00:00Z", 10, date, ZoneOffset.UTC),
                 Arguments.of("2022-11-07T22:00:00Z", 22, date, ZoneOffset.UTC),
                 Arguments.of("2022-10-29T22:00:00Z", 22, dateDuringDST, ZoneId.of("Europe/London")),
-                            )
+            )
         }
 
         @JvmStatic
@@ -95,7 +156,7 @@ internal class DateAcolyteTest {
                 Arguments.of("2022-11-09T08:59:59.999999999Z", 9, date, ZoneOffset.UTC),
                 Arguments.of("2022-11-08T09:59:59.999999999Z", 10, date, ZoneOffset.UTC),
                 Arguments.of("2022-11-08T21:59:59.999999999Z", 22, date, ZoneOffset.UTC),
-                            )
+            )
         }
 
         @JvmStatic
@@ -119,7 +180,7 @@ internal class DateAcolyteTest {
                 Arguments.of("2022-10-31T09:00:00Z", 9, date3, ZoneOffset.UTC),
                 Arguments.of("2022-10-24T10:00:00Z", 10, date3, ZoneOffset.UTC),
                 Arguments.of("2022-10-24T22:00:00Z", 22, date3, ZoneOffset.UTC)
-                            )
+            )
         }
 
         @JvmStatic
@@ -143,7 +204,7 @@ internal class DateAcolyteTest {
                 Arguments.of("2022-11-21T08:59:59.999999999Z", 9, date3, ZoneOffset.UTC),
                 Arguments.of("2022-11-14T09:59:59.999999999Z", 10, date3, ZoneOffset.UTC),
                 Arguments.of("2022-11-14T21:59:59.999999999Z", 22, date3, ZoneOffset.UTC),
-                            )
+            )
         }
 
         @JvmStatic
@@ -167,7 +228,7 @@ internal class DateAcolyteTest {
                 Arguments.of("2022-10-01T09:00:00Z", 9, date3, ZoneOffset.UTC),
                 Arguments.of("2022-09-01T10:00:00Z", 10, date3, ZoneOffset.UTC),
                 Arguments.of("2022-09-01T22:00:00Z", 22, date3, ZoneOffset.UTC)
-                            )
+            )
         }
 
         @JvmStatic
@@ -191,7 +252,7 @@ internal class DateAcolyteTest {
                 Arguments.of("2023-01-01T08:59:59.999999999Z", 9, date3, ZoneOffset.UTC),
                 Arguments.of("2022-12-01T09:59:59.999999999Z", 10, date3, ZoneOffset.UTC),
                 Arguments.of("2022-12-01T21:59:59.999999999Z", 22, date3, ZoneOffset.UTC),
-                            )
+            )
         }
 
         @JvmStatic
@@ -202,7 +263,7 @@ internal class DateAcolyteTest {
                 Arguments.of("2022-11-14T14:55:00Z", 14, "2022-11-14T15:55:00Z"),
                 Arguments.of("2022-11-13T14:55:00Z", 14, "2022-11-14T00:55:00Z"),
                 Arguments.of("2022-10-31T14:55:00Z", 14, "2022-11-01T00:55:00Z"),
-                            )
+            )
 
         }
     }
@@ -340,8 +401,8 @@ internal class DateAcolyteTest {
     }
 
 
-    private fun mock(current: Instant, test: Runnable) {
-        val fixedClock = Clock.fixed(current, ZoneOffset.UTC)
+    private fun mock(current: Instant, zoneId: ZoneId = ZoneOffset.UTC, test: Runnable) {
+        val fixedClock = Clock.fixed(current, zoneId)
         mockStatic(Clock::class.java).use { instantMock ->
             instantMock.`when`<Clock> { Clock.systemDefaultZone() }.thenReturn(fixedClock)
             instantMock.`when`<Clock> { Clock.system(any()) }.thenReturn(fixedClock)

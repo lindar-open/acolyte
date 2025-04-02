@@ -70,17 +70,16 @@ class DateAcolyte(private var timezone: ZoneId) {
         return DateParserAcolyte(formatter)
     }
 
-
     fun toLocalDateTime(instant: Instant): LocalDateTime {
         return LocalDateTime.ofInstant(instant, timezone)
     }
 
     fun startOfDay(): ZonedDateTime {
-        return ZonedDateTime.of(LocalDate.now(), LocalTime.of(0, 0, 0), timezone)
+        return ZonedDateTime.of(LocalDate.now(timezone), LocalTime.of(0, 0, 0), timezone)
     }
 
     fun endOfDay(): ZonedDateTime {
-        return ZonedDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59), timezone)
+        return ZonedDateTime.of(LocalDate.now(timezone), LocalTime.of(23, 59, 59), timezone)
     }
 
     fun startOfWeek(): ZonedDateTime {
